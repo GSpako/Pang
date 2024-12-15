@@ -68,6 +68,7 @@ public class Cohete : MonoBehaviour
     {
         Transform     SpeedMsg;
         Action        RotMsg, ActionMsg;
+        
 
         transform.Rotate(new Vector3(-90.0f, 0.0f, 0.0f), Space.Self);
         transform.localScale = new Vector3(0.0075f, 0.0075f, 0.0075f);
