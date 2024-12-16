@@ -26,6 +26,8 @@ public class Ball : MonoBehaviour
     HRT_Time userTime;
     HRT_Time oneSecond, halfSecond, tenMillis;
 
+    public Vector2 vel = new Vector2(0.4f, 0);
+
     [SerializeField]
     RTDESKEngine Engine;   //Shortcut
     Rigidbody2D rg;
@@ -37,7 +39,6 @@ public class Ball : MonoBehaviour
         GetComponent<RTDESKEntity>().MailBox = ReceiveMessage;
 
         rg = GetComponent<Rigidbody2D>();
-        rg.velocity = new Vector2(0.4f, 0);
     }
 
     // Start is called before the first frame update
@@ -90,26 +91,35 @@ public class Ball : MonoBehaviour
                     switch ((int)a.action)
                     {
                         case (int)BallActions.Start:
+                            rg.velocity = vel;
+
                             break;
                         case (int)BallActions.Destroy:
 
                             Vector3 scale = gameObject.transform.localScale;
 
-                            if (scale.x < .2f)
+                            if (scale.x < .1f)
                             {
                                 Engine.PushMsg(Msg);
                                 Destroy(gameObject);
                             }
+                            else
+                            {
+                                GameObject b1 = Instantiate(BallPrefab, transform.position, Quaternion.identity);
+                                b1.transform.localScale = new Vector3(scale.x / 2, scale.y / 2, scale.z / 2);
+                                b1.transform.position = new Vector3(transform.position.x + ((scale.x / 4) + (scale.x / 2) * 0.2f), transform.position.y, transform.position.z);
+                                
+                                b1.GetComponent<Ball>().vel = new Vector2(-vel.x, vel.y);
 
-                            GameObject b1 = Instantiate(BallPrefab, transform.position, Quaternion.identity);
-                            b1.transform.localScale = new Vector3(scale.x/2, scale.y / 2, scale.z / 2);
-                            b1.transform.position = new Vector3(transform.position.x + ((scale.x / 2) + (scale.x / 2) * 0.2f), transform.position.y, transform.position.z);
-                            GameObject b2 = Instantiate(BallPrefab, transform.position, Quaternion.identity);
-                            b2.transform.localScale = new Vector3(scale.x / 2, scale.y / 2, scale.z / 2);
-                            b1.transform.position = new Vector3(transform.position.x - ((scale.x / 2) + (scale.x / 2) * 0.2f), transform.position.y, transform.position.z);
-
-                            Engine.PushMsg(Msg);
-                            Destroy(gameObject);
+                                GameObject b2 = Instantiate(BallPrefab, transform.position, Quaternion.identity);
+                                b2.transform.localScale = new Vector3(scale.x / 2, scale.y / 2, scale.z / 2);
+                                b2.transform.position = new Vector3(transform.position.x - ((scale.x / 4) + (scale.x / 2) * 0.2f), transform.position.y, transform.position.z);
+                                
+                        
+                                Engine.PushMsg(Msg);
+                                Destroy(gameObject);
+                            }
+                            
                             break;
                         default:
                             break;
