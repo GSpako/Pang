@@ -46,7 +46,6 @@ public class Ball : MonoBehaviour
     {
         Action ActMsg;
         Engine = GetComponent<RTDESKEntity>().RTDESKEngineScript;
-        RTDESKInputManager IM = Engine.GetInputManager();
 
         halfSecond = Engine.ms2Ticks(500);
         tenMillis = Engine.ms2Ticks(10);
@@ -54,17 +53,16 @@ public class Ball : MonoBehaviour
 
         //Get a new message to activate a new action in the object
         ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
-        //Update the content of the message sending and activation 
         ActMsg.action = (int)BallActions.Start;
-
         Engine.SendMsg(ActMsg, gameObject, ReceiveMessage, tenMillis);
 
+        /*
         //Get a new message to activate a new action in the object
         ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
-        //Update the content of the message sending and activation 
         ActMsg.action = (int)BallActions.Destroy;
-
         Engine.SendMsg(ActMsg, gameObject, ReceiveMessage, Engine.ms2Ticks(5000));
+        */
+        
     }
 
     void ReceiveMessage(MsgContent Msg)
@@ -91,19 +89,20 @@ public class Ball : MonoBehaviour
                     switch ((int)a.action)
                     {
                         case (int)BallActions.Start:
+                            //Initialize the object speed
                             rg.velocity = vel;
 
                             break;
                         case (int)BallActions.Destroy:
-
+                            //Destroy the ball
                             Vector3 scale = gameObject.transform.localScale;
-
+                            //If small enough destroy the ball
                             if (scale.x < .1f)
                             {
                                 Engine.PushMsg(Msg);
                                 Destroy(gameObject);
                             }
-                            else
+                            else //if big enough split the ball into two, and make them move into opossite directions
                             {
                                 GameObject b1 = Instantiate(BallPrefab, transform.position, Quaternion.identity);
                                 b1.transform.localScale = new Vector3(scale.x / 2, scale.y / 2, scale.z / 2);
@@ -115,7 +114,7 @@ public class Ball : MonoBehaviour
                                 b2.transform.localScale = new Vector3(scale.x / 2, scale.y / 2, scale.z / 2);
                                 b2.transform.position = new Vector3(transform.position.x - ((scale.x / 4) + (scale.x / 2) * 0.2f), transform.position.y, transform.position.z);
                                 
-                        
+                                //Destroy the current sphere
                                 Engine.PushMsg(Msg);
                                 Destroy(gameObject);
                             }

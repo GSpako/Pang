@@ -47,7 +47,6 @@ public class Gun : MonoBehaviour
     {
         Engine = GetComponent<RTDESKEntity>().RTDESKEngineScript;
         RTDESKInputManager IM = Engine.GetInputManager();
-
     }
 
     void ReceiveMessage(MsgContent Msg)
@@ -60,8 +59,6 @@ public class Gun : MonoBehaviour
                 break;
 
             case (int)UserMsgTypes.Position:
-
-                Engine.SendMsg(Msg, tenMillis);
                 break;
 
             case (int)UserMsgTypes.Rotation:
@@ -94,10 +91,10 @@ public class Gun : MonoBehaviour
                     switch ((int)a.action)
                     {
                         case (int)UserActions.Start: //Shoot
+                            // Send a msg to the self msg shoot action
                             Action ActMsg;
                             ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
                             ActMsg.action = (int)GunActions.Shoot;
-
                             Engine.SendMsg(ActMsg, gameObject, ReceiveMessage, tenMillis);
                             break;
 

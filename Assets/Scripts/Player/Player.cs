@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Action ActMsg;
+        //Get the engine
         Engine = GetComponent<RTDESKEntity>().RTDESKEngineScript;
         RTDESKInputManager IM = Engine.GetInputManager();
 
@@ -58,17 +58,17 @@ public class Player : MonoBehaviour
         IM.RegisterKeyCode(ReceiveMessage, KeyCode.A);
         IM.RegisterKeyCode(ReceiveMessage, KeyCode.D);
 
+        //Create cariables for sendTime
         halfSecond = Engine.ms2Ticks(500);
         tenMillis = Engine.ms2Ticks(10);
         fiftyMillis = Engine.ms2Ticks(50);
         oneSecond = Engine.ms2Ticks(1000);
         reloadTimeHRT = Engine.ms2Ticks(reloadTime);
 
-        //Get a new message to activate a new action in the object
+        //Send the start message
+        Action ActMsg;
         ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
-        //Update the content of the message sending and activation 
         ActMsg.action = (int)PlayerActions.Start;
-
         Engine.SendMsg(ActMsg, gameObject, ReceiveMessage, tenMillis);
     }
 
@@ -83,20 +83,22 @@ public class Player : MonoBehaviour
                 switch (IMsg.c)
                 {
                     case KeyCode.W:
-                        Action gunMsg;
-                        gunMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
-                        
+                        //Shoot the gun when not shooting alredy, this way you cant simply spam the button
                         if (KeyState.DOWN == IMsg.s && !shooting)
                         {
+                            //Send a msg to indicate the gun to shoot
+                            Action gunMsg;
+                            gunMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
                             gunMsg.action = (int)UserActions.Start;
                             Engine.SendMsg(gunMsg, gameObject, gunMailBox, HRTimer.HRT_INMEDIATELY);
+                            
+                            //Mark the player as shooting
                             shooting = true;
 
+                            //Send a msg to enable movement and shooting again in the specified time
                             Action ActMsg;
                             ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
-                            //Update the content of the message sending and activation 
                             ActMsg.action = (int)PlayerActions.StopShooting;
-
                             Engine.SendMsg(ActMsg, gameObject, ReceiveMessage, reloadTimeHRT);
                         }
                         else
@@ -108,7 +110,7 @@ public class Player : MonoBehaviour
                         break;
 
                     case KeyCode.D:
-
+                        //Add movement speed if the key is pressed down, remove if pressed up
                         if (KeyState.DOWN == IMsg.s)
                             movement += new Vector3(speed, 0, 0);
                         else
@@ -116,7 +118,7 @@ public class Player : MonoBehaviour
 
                         break;
                     case KeyCode.A:
-
+                        //Add movement speed if the key is pressed down, remove if pressed up
                         if (KeyState.DOWN == IMsg.s)
                             movement -= new Vector3(speed, 0, 0);
                         else
@@ -128,10 +130,11 @@ public class Player : MonoBehaviour
                 break;
 
             case (int)UserMsgTypes.Position:
-
+                // Only move when not shooting, or when there is any spedd
                 if (movement != Vector3.zero && !shooting)
                 {
                     transform.Translate(movement);
+                    //Move the character, limit the movement to the screen/lvl bounds
                     Vector3 pos = transform.position;
 
                     if (transform.position.x > 1.53f)
@@ -168,11 +171,11 @@ public class Player : MonoBehaviour
                         case (int)PlayerActions.End:
                             break;
                         case (int)PlayerActions.Start:
-
+                            //Start the movement updating, with this we will move the caracter whenever the speed is apropiate
                             p = (Transform)Engine.PopMsg((int)UserMsgTypes.Position);
-                            //We have to start the Object behaviour
                             Engine.SendMsg(p, gameObject, ReceiveMessage, fiftyMillis);
 
+                            //Push the msg
                             Engine.PushMsg(Msg);
                             break;
                         case (int)PlayerActions.Move:
