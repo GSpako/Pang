@@ -18,19 +18,21 @@ using System;
 using UnityEngine;
 using static MsgContent;
 
-enum PlayerActions { Move, Idle, Start, Sleep, WakeUp, End }
+enum PlayerActions { Move, StopShooting, Start, Sleep, WakeUp, End }
 
 // CubeReceiveMessage requires the GameObject to have a RTDESKEntity component
 [RequireComponent(typeof(RTDESKEntity))]
 public class Player : MonoBehaviour
 {
     HRT_Time userTime;
-    HRT_Time oneSecond, fiftyMillis, halfSecond, tenMillis;
+    HRT_Time oneSecond, fiftyMillis, halfSecond, tenMillis, reloadTimeHRT;
 
     public float speed = 1.0f;
     public Vector3 movement = new Vector3(0, 0, 0);
     bool shooting = false;
     MessageManager gunMailBox;
+
+    public float reloadTime = 0;
 
     [SerializeField]
     RTDESKEngine Engine;   //Shortcut
@@ -60,6 +62,7 @@ public class Player : MonoBehaviour
         tenMillis = Engine.ms2Ticks(10);
         fiftyMillis = Engine.ms2Ticks(50);
         oneSecond = Engine.ms2Ticks(1000);
+        reloadTimeHRT = Engine.ms2Ticks(reloadTime);
 
         //Get a new message to activate a new action in the object
         ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
@@ -82,18 +85,25 @@ public class Player : MonoBehaviour
                     case KeyCode.W:
                         Action gunMsg;
                         gunMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
-
-                        if (KeyState.DOWN == IMsg.s)
+                        
+                        if (KeyState.DOWN == IMsg.s && !shooting)
                         {
                             gunMsg.action = (int)UserActions.Start;
                             Engine.SendMsg(gunMsg, gameObject, gunMailBox, HRTimer.HRT_INMEDIATELY);
                             shooting = true;
+
+                            Action ActMsg;
+                            ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
+                            //Update the content of the message sending and activation 
+                            ActMsg.action = (int)PlayerActions.StopShooting;
+
+                            Engine.SendMsg(ActMsg, gameObject, ReceiveMessage, reloadTimeHRT);
                         }
                         else
                         {
-                            gunMsg.action = (int)UserActions.End;
-                            Engine.SendMsg(gunMsg, gameObject, gunMailBox, HRTimer.HRT_INMEDIATELY);
-                            shooting = false;
+                            //gunMsg.action = (int)UserActions.End;
+                            //Engine.SendMsg(gunMsg, gameObject, gunMailBox, HRTimer.HRT_INMEDIATELY);
+                            //shooting = false;
                         }
                         break;
 
@@ -148,7 +158,8 @@ public class Player : MonoBehaviour
                 if (name == Msg.Sender.name)
                     switch ((int)a.action)
                     {
-                        case (int)PlayerActions.Idle:
+                        case (int)PlayerActions.StopShooting:
+                            shooting = false;
                             break;
                         case (int)PlayerActions.Sleep:
                             break;

@@ -554,6 +554,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   growRate: 0.2
+  Hook: {fileID: 3972818502024388640, guid: 8b3b3a1c72fb51346aea6122bc460b66, type: 3}
   Engine: {fileID: 0}
 --- !u!1 &659413361
 GameObject:
@@ -588,6 +589,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.01
   movement: {x: 0, y: 0, z: 0}
+  reloadTime: 250
   Engine: {fileID: 976721385}
 --- !u!114 &659413363
 MonoBehaviour:
