@@ -65,7 +65,7 @@ public class Hook : MonoBehaviour
 
     void ReceiveMessage(MsgContent Msg)
     {
-        Transform p;
+        Transform p;    
         switch (Msg.Type)
         {
             case (int)RTDESKMsgTypes.Input:
@@ -131,7 +131,7 @@ public class Hook : MonoBehaviour
                             Engine.SendMsg(growMsg, gameObject, ReceiveMessage, tenMillis);
                             break;
                         case (int)HookActions.Destroy:
-                            Debug.Log("Destroying Hook");
+                            //Debug.Log("Destroying Hook");
                             DestroyHook();
                             
                             Engine.PushMsg(Msg);
