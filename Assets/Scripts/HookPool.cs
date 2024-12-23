@@ -56,7 +56,6 @@ public class HookPool : MonoBehaviour
 
         playerMailBox = RTDESKEntity.getMailBox("Player");
         timerMailBox = RTDESKEntity.getMailBox("TimerManager");
-        //Register keys that we want to be signaled in case the user press them
 
         pool = new Queue<GameObject>();
         for (int i = 0;i<poolSize;i++){

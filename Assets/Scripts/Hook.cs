@@ -54,6 +54,7 @@ public class Hook : MonoBehaviour
         instantiating and sending a message start is too slow, therefore it doesnt work correctly
         */
         Engine = GetComponent<RTDESKEntity>().RTDESKEngineScript;
+        //dummy variable
         Action ActMsg;
 
         RTDESKInputManager IM = Engine.GetInputManager();
@@ -63,8 +64,10 @@ public class Hook : MonoBehaviour
         oneSecond = Engine.ms2Ticks(1000);
         hundredMillis = Engine.ms2Ticks(100);
 
+        //routes and mailbox
         HookPoolobj = GameObject.Find("/Managers/HookPool");
         hookPoolMail = RTDESKEntity.getMailBox("HookPool");
+        
         MIN_HEIGHT = spriteRenderer.size.y;
     }
 
@@ -172,7 +175,7 @@ public class Hook : MonoBehaviour
         {
             //Destroy(gameObject);
 
-            //Necesitaba un tipo disponible para mandar el mensaje, asi que rotacion es aunque no sea una rotacion
+            //Necesitaba un tipo disponible para mandar el mensaje, asi que Object
             spriteRenderer.size = new Vector2(spriteRenderer.size.x, MIN_HEIGHT);// height;
             ObjectMsg a = (ObjectMsg)Engine.PopMsg((int)UserMsgTypes.Object);
             a.o = this.gameObject;
