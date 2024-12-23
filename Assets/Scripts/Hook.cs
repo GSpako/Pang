@@ -17,7 +17,7 @@ using System;
 using UnityEngine;
 using static MsgContent;
 
-enum HookActions { Start, Grow }
+public enum HookActions { Start, Grow, Destroy }
 
 // CubeReceiveMessage requires the GameObject to have a RTDESKEntity component
 [RequireComponent(typeof(RTDESKEntity))]
@@ -66,7 +66,6 @@ public class Hook : MonoBehaviour
     void ReceiveMessage(MsgContent Msg)
     {
         Transform p;
-
         switch (Msg.Type)
         {
             case (int)RTDESKMsgTypes.Input:
@@ -131,7 +130,12 @@ public class Hook : MonoBehaviour
                             growMsg.action = (int)HookActions.Grow;
                             Engine.SendMsg(growMsg, gameObject, ReceiveMessage, tenMillis);
                             break;
-
+                        case (int)HookActions.Destroy:
+                            Debug.Log("Destroying Hook");
+                            DestroyHook();
+                            
+                            Engine.PushMsg(Msg);
+                            break;
                         default:
                             break;
                     }
@@ -139,6 +143,7 @@ public class Hook : MonoBehaviour
                 {
                     switch ((int)a.action)
                     {
+
                         case (int)UserActions.Start: //Stop the movement of the object
 
                             break;
@@ -157,6 +162,8 @@ public class Hook : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+
     }
 
 }

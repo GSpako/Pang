@@ -175,5 +175,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f85f2f750161ed40ac24f82e882f199, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vel: {x: 0.4, y: 0}
   Engine: {fileID: 0}
   BallPrefab: {fileID: 2491160401884742846}

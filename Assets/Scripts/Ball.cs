@@ -16,7 +16,6 @@ using HRT_Time = System.Int64;
 using System;
 using UnityEngine;
 using static MsgContent;
-
 enum BallActions { Start, Destroy }
 
 // CubeReceiveMessage requires the GameObject to have a RTDESKEntity component
@@ -138,5 +137,23 @@ public class Ball : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag != "Hook") return;
+
+        //Destroy the ball, split it in half like it should
+        Action destroyMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
+        destroyMsg.action = (int)BallActions.Destroy;
+        Engine.SendMsg(destroyMsg, gameObject, ReceiveMessage, tenMillis);
+
+        //For sending a destroy message to the hook get its mailbox
+        MessageManager hookMailBox = RTDESKEntity.getMailBox(other.gameObject.name);
+
+        Action destroyhookMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
+        destroyhookMsg.action = (int)HookActions.Destroy;
+        Engine.SendMsg(destroyhookMsg, other.gameObject, hookMailBox, tenMillis);
+
     }
 }
