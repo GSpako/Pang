@@ -40,18 +40,19 @@ public class HookPool : MonoBehaviour
     [SerializeField]
     private GameObject hookPrefab;
 
-    private void Awake()
+    MessageManager hookMailBox;
+
+        private void Awake()
     {
         //Assign the "listener" to the normalized component RTDESKEntity. Every gameObject that wants to receive a message must have a public mailbox
         GetComponent<RTDESKEntity>().MailBox = ReceiveMessage;
     }
 
-    // Start is called before the first frame update
+
     void Start()
     {
 
         Engine = GetComponent<RTDESKEntity>().RTDESKEngineScript;
-        RTDESKInputManager IM = Engine.GetInputManager();
 
         playerMailBox = RTDESKEntity.getMailBox("Player");
         timerMailBox = RTDESKEntity.getMailBox("TimerManager");
@@ -61,6 +62,7 @@ public class HookPool : MonoBehaviour
         for (int i = 0;i<poolSize;i++){
             GameObject aux = Instantiate(hookPrefab, transform.position, Quaternion.identity);
             aux.transform.parent = this.gameObject.transform;
+            aux.name = ""+i+"";
             aux.SetActive(false);
             pool.Enqueue(aux);
         } 
@@ -74,25 +76,18 @@ public class HookPool : MonoBehaviour
                 break;
             case (int)UserMsgTypes.Position:
                 break;
-            case (int)UserMsgTypes.Rotation:
+            case (int)UserMsgTypes.Object:
+                ObjectMsg obj = (ObjectMsg)Msg;
+                Debug.Log(obj.o.name);
+                obj.o.SetActive(false);
+                pool.Enqueue(obj.o);
+                Engine.PushMsg(Msg);
                 break;
             case (int)UserMsgTypes.Scale:
                 break;
             case (int)UserMsgTypes.TRE:
                 break;
             case (int)UserMsgTypes.Action:
-                Action a;
-                a = (Action)Msg;
-               
-                switch ((int)a.action)
-                {
-                    case (int)UserActions.Start:
-                        break;
-                    case (int)UserActions.End:
-                        break;
-                }
-                Engine.PushMsg(Msg);
-                
                 break;
         }
     }

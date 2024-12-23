@@ -19,6 +19,8 @@ using static MsgContent;
 
 public enum HookActions { Start, Grow, Destroy }
 
+
+
 // CubeReceiveMessage requires the GameObject to have a RTDESKEntity component
 [RequireComponent(typeof(RTDESKEntity))]
 public class Hook : MonoBehaviour
@@ -37,6 +39,10 @@ public class Hook : MonoBehaviour
     RTDESKEngine Engine;   //Shortcut
     SpriteRenderer spriteRenderer;
 
+    MessageManager hookPoolMail;
+
+    GameObject HookPoolobj;
+
     private void Awake()
     {
         //Assign the "listener" to the normalized component RTDESKEntity. Every gameObject that wants to receive a message must have a public mailbox
@@ -54,6 +60,9 @@ public class Hook : MonoBehaviour
         halfSecond = Engine.ms2Ticks(500);
         tenMillis = Engine.ms2Ticks(10);
         oneSecond = Engine.ms2Ticks(1000);
+
+        HookPoolobj = GameObject.Find("/Managers/HookPool");
+        hookPoolMail = RTDESKEntity.getMailBox("HookPool");
 
         //Get a new message to activate a new action in the object
         ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
@@ -160,7 +169,12 @@ public class Hook : MonoBehaviour
 
         void DestroyHook()
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
+
+            //Necesitaba un tipo disponible para mandar el mensaje, asi que rotacion es aunque no sea una rotacion
+            ObjectMsg a = (ObjectMsg)Engine.PopMsg((int)UserMsgTypes.Object);
+            a.o = this.gameObject;
+            Engine.SendMsg(a, HookPoolobj, hookPoolMail, tenMillis);
         }
 
 
