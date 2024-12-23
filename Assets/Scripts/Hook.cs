@@ -94,7 +94,11 @@ public class Hook : MonoBehaviour
                     {
                         case (int)HookActions.Grow:
 
-                            if (growing)
+                            if (Time.timeScale == 0)
+                            {
+                                Engine.SendMsg(Msg, tenMillis);
+                            }
+                            else if (growing)
                             {
                                 if (height > 43.43f)
                                 {

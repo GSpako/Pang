@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
     MessageManager gunMailBox;
 
     public float reloadTime = 0;
+    bool paused = false;
 
     [SerializeField]
     RTDESKEngine Engine;   //Shortcut
@@ -84,7 +85,7 @@ public class Player : MonoBehaviour
                 {
                     case KeyCode.W:
                         //Shoot the gun when not shooting alredy, this way you cant simply spam the button
-                        if (KeyState.DOWN == IMsg.s && !shooting)
+                        if (KeyState.DOWN == IMsg.s && !shooting && !paused)
                         {
                             //Send a msg to indicate the gun to shoot
                             Action gunMsg;
@@ -131,7 +132,7 @@ public class Player : MonoBehaviour
 
             case (int)UserMsgTypes.Position:
                 // Only move when not shooting, or when there is any spedd
-                if (movement != Vector3.zero && !shooting)
+                if (movement != Vector3.zero && !shooting && !paused)
                 {
                     transform.Translate(movement);
                     //Move the character, limit the movement to the screen/lvl bounds
@@ -189,8 +190,10 @@ public class Player : MonoBehaviour
                     switch ((int)a.action)
                     {
                         case (int)UserActions.GetSteady: //Stop the movement of the object
+                            paused = true;
                             break;
                         case (int)UserActions.Move:
+                            paused = false;
                             break;
                     }
                     Engine.PushMsg(Msg);

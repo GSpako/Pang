@@ -16,6 +16,8 @@ using HRT_Time = System.Int64;
 
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime;
+using UnityEditor.XR;
 enum TimerActions { Start, Update, End}
 
 // CubeReceiveMessage requires the GameObject to have a RTDESKEntity component
@@ -32,6 +34,7 @@ public class Timer : MonoBehaviour
     TextMeshProUGUI text;
 
     public int totalTime = 0;
+    bool paused = false;
 
     private void Awake()
     {
@@ -54,7 +57,7 @@ public class Timer : MonoBehaviour
         tenMillis = Engine.ms2Ticks(10);
         oneSecond = Engine.ms2Ticks(1000);
 
-        Engine.SendMsg(ActMsg, gameObject, ReceiveMessage, tenMillis);
+        Engine.SendMsg(ActMsg, gameObject, ReceiveMessage, HRTimer.HRT_INMEDIATELY);
     }
 
     void ReceiveMessage(MsgContent Msg)
@@ -89,17 +92,24 @@ public class Timer : MonoBehaviour
                             break;
                         
                         case (int)TimerActions.Update:// Update the text, if  time has run out, send mesage to stop game
-                            int currentTime = int.Parse(text.text);
-                            text.text = (currentTime - 1).ToString();
-
-                            if((currentTime - 1) == 0)
-                            {
-
-                                Engine.PushMsg(Msg);
-                            }
-                            else 
+                            if(paused)
                             {
                                 Engine.SendMsg(Msg, oneSecond);
+                            }
+                            else 
+                            { 
+                                int currentTime = int.Parse(text.text);
+                                text.text = (currentTime - 1).ToString();
+
+                                if((currentTime - 1) == 0)
+                                {
+
+                                    Engine.PushMsg(Msg);
+                                }
+                                else 
+                                {
+                                    Engine.SendMsg(Msg, oneSecond);
+                                }
                             }
                             break;
 
@@ -114,8 +124,10 @@ public class Timer : MonoBehaviour
                     switch ((int)a.action)
                     {
                         case (int)UserActions.GetSteady: //Stop the movement of the object
+                            paused = true;
                             break;
                         case (int)UserActions.Move:
+                            paused = false;
                             break;
                     }
                     Engine.PushMsg(Msg);
