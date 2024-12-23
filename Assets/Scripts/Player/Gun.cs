@@ -33,6 +33,10 @@ public class Gun : MonoBehaviour
     bool growing = false;
     public GameObject Hook;
 
+    MessageManager hookPoolMail;
+
+    GameObject HookPoolobj;
+
     [SerializeField]
     RTDESKEngine Engine;   //Shortcut
 
@@ -47,6 +51,9 @@ public class Gun : MonoBehaviour
     {
         Engine = GetComponent<RTDESKEntity>().RTDESKEngineScript;
         RTDESKInputManager IM = Engine.GetInputManager();
+
+        HookPoolobj = GameObject.Find("/Managers/HookPool");
+        hookPoolMail = RTDESKEntity.getMailBox("HookPool");
     }
 
     void ReceiveMessage(MsgContent Msg)
@@ -75,7 +82,14 @@ public class Gun : MonoBehaviour
                     switch ((int)a.action)
                     {
                         case (int)GunActions.Shoot:
-                            Instantiate(Hook, transform.position, transform.rotation);
+                            //Instantiate(Hook, transform.position, transform.rotation);
+
+                                        
+
+                            Transform ActMsg = (Transform)Engine.PopMsg((int)UserMsgTypes.Position);
+                            ActMsg.V3 = this.gameObject.transform.position;
+                            Engine.SendMsg(ActMsg, HookPoolobj, hookPoolMail, tenMillis);
+                
                             Engine.PushMsg(Msg); 
                             break;
 

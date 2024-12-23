@@ -60,7 +60,8 @@ public class HookPool : MonoBehaviour
 
         pool = new Queue<GameObject>();
         for (int i = 0;i<poolSize;i++){
-            GameObject aux = Instantiate(hookPrefab, transform.position, Quaternion.identity);
+
+            GameObject aux = Instantiate(hookPrefab, new Vector3(0,-0.8f,0), Quaternion.identity);
             aux.transform.parent = this.gameObject.transform;
             aux.name = ""+i+"";
             aux.SetActive(false);
@@ -74,13 +75,36 @@ public class HookPool : MonoBehaviour
         {
             case (int)RTDESKMsgTypes.Input:
                 break;
+
             case (int)UserMsgTypes.Position:
+                Transform t;
+                GameObject aux ;
+                Action ActMsg; 
+
+                //Set hook in place
+                t = (Transform)Msg;
+                aux = pool.Dequeue();
+                aux.SetActive(true);
+                aux.transform.position = t.V3;
+
+                //tell hook to go off
+                hookMailBox = RTDESKEntity.getMailBox(aux.name);
+                
+                ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
+                ActMsg.action = (int)HookActions.Start;
+                Engine.SendMsg(ActMsg, aux, hookMailBox, tenMillis);
+                
+                Engine.PushMsg(Msg);
                 break;
+
+
             case (int)UserMsgTypes.Object:
+                //Message for putting a hook back in the pool
                 ObjectMsg obj = (ObjectMsg)Msg;
-                Debug.Log(obj.o.name);
+                
                 obj.o.SetActive(false);
                 pool.Enqueue(obj.o);
+
                 Engine.PushMsg(Msg);
                 break;
             case (int)UserMsgTypes.Scale:

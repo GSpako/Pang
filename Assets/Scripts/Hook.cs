@@ -26,7 +26,7 @@ public enum HookActions { Start, Grow, Destroy }
 public class Hook : MonoBehaviour
 {
     HRT_Time userTime;
-    HRT_Time oneSecond, halfSecond, tenMillis;
+    HRT_Time oneSecond, halfSecond, tenMillis, hundredMillis;
 
     public float growRate = 0.01f;
 
@@ -48,29 +48,26 @@ public class Hook : MonoBehaviour
         //Assign the "listener" to the normalized component RTDESKEntity. Every gameObject that wants to receive a message must have a public mailbox
         GetComponent<RTDESKEntity>().MailBox = ReceiveMessage;
         spriteRenderer = GetComponent<SpriteRenderer>();
-    }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Action ActMsg;
+        /*
+        All code that normally goes into start has to go on awake since at
+        instantiating and sending a message start is too slow, therefore it doesnt work correctly
+        */
         Engine = GetComponent<RTDESKEntity>().RTDESKEngineScript;
+        Action ActMsg;
+
         RTDESKInputManager IM = Engine.GetInputManager();
 
         halfSecond = Engine.ms2Ticks(500);
         tenMillis = Engine.ms2Ticks(10);
         oneSecond = Engine.ms2Ticks(1000);
+        hundredMillis = Engine.ms2Ticks(100);
 
         HookPoolobj = GameObject.Find("/Managers/HookPool");
         hookPoolMail = RTDESKEntity.getMailBox("HookPool");
-
-        //Get a new message to activate a new action in the object
-        ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
-        //Update the content of the message sending and activation 
-        ActMsg.action = (int)HookActions.Start;
-
-        Engine.SendMsg(ActMsg, gameObject, ReceiveMessage, tenMillis);
+        MIN_HEIGHT = spriteRenderer.size.y;
     }
+
 
     void ReceiveMessage(MsgContent Msg)
     {
@@ -104,7 +101,7 @@ public class Hook : MonoBehaviour
 
                             if (Time.timeScale == 0)
                             {
-                                Engine.SendMsg(Msg, tenMillis);
+                                Engine.SendMsg(Msg, hundredMillis);
                             }
                             else if (growing)
                             {
@@ -115,9 +112,10 @@ public class Hook : MonoBehaviour
                                 }
                                 else
                                 {
+                                    Debug.Log("growing");
                                     height += growRate;
                                     spriteRenderer.size = new Vector2(spriteRenderer.size.x, height);// height;
-                                    Engine.SendMsg(Msg, tenMillis);
+                                    Engine.SendMsg(Msg,gameObject,ReceiveMessage, tenMillis);
                                 }
                             }
                             else
@@ -127,18 +125,21 @@ public class Hook : MonoBehaviour
 
                         case (int)HookActions.Start:
 
-                            MIN_HEIGHT = spriteRenderer.size.y;
+                           
                             height = MIN_HEIGHT;
+                            Debug.Log("height: " + height);
 
                             Engine.PushMsg(Msg);
 
                             Action growMsg;
                             growing = true;
+                            
 
                             growMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
                             growMsg.action = (int)HookActions.Grow;
                             Engine.SendMsg(growMsg, gameObject, ReceiveMessage, tenMillis);
                             break;
+
                         case (int)HookActions.Destroy:
                             //Debug.Log("Destroying Hook");
                             DestroyHook();
@@ -172,6 +173,7 @@ public class Hook : MonoBehaviour
             //Destroy(gameObject);
 
             //Necesitaba un tipo disponible para mandar el mensaje, asi que rotacion es aunque no sea una rotacion
+            spriteRenderer.size = new Vector2(spriteRenderer.size.x, MIN_HEIGHT);// height;
             ObjectMsg a = (ObjectMsg)Engine.PopMsg((int)UserMsgTypes.Object);
             a.o = this.gameObject;
             Engine.SendMsg(a, HookPoolobj, hookPoolMail, tenMillis);
