@@ -113,7 +113,7 @@ public class HookPool : MonoBehaviour
 
                         ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
                         ActMsg.action = (int)HookActions.Start;
-                        Engine.SendMsg(ActMsg, aux, hookMailBox, 0);
+                        Engine.SendMsg(ActMsg, aux, hookMailBox, HRTimer.HRT_INMEDIATELY);
 
                         Debug.Log("Not Instant");
 
@@ -122,7 +122,7 @@ public class HookPool : MonoBehaviour
                     else 
                     {
                         Debug.Log("Instant");
-                        Engine.SendMsg(shootRenable, gameObject, playerMailBox, 1);
+                        Engine.SendMsg(shootRenable, gameObject, playerMailBox, HRTimer.HRT_ALMOST_INMEDIATELY);
                     }
                 }
 
