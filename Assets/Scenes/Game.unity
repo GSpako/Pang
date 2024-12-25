@@ -633,7 +633,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.01
   movement: {x: 0, y: 0, z: 0}
-  reloadTime: 250
   Engine: {fileID: 976721385}
 --- !u!114 &659413363
 MonoBehaviour:
@@ -1425,6 +1424,14 @@ PrefabInstance:
       propertyPath: hookPrefab
       value: 
       objectReference: {fileID: 3972818502024388640, guid: 8b3b3a1c72fb51346aea6122bc460b66, type: 3}
+    - target: {fileID: 1262985153986317382, guid: 7c5ccb722c3fa1b4f86368b6bb2efbdc, type: 3}
+      propertyPath: reloadTime
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 1262985153986317382, guid: 7c5ccb722c3fa1b4f86368b6bb2efbdc, type: 3}
+      propertyPath: creationDistance
+      value: 0.05
+      objectReference: {fileID: 0}
     - target: {fileID: 3413665175110403483, guid: 7c5ccb722c3fa1b4f86368b6bb2efbdc, type: 3}
       propertyPath: m_Name
       value: Managers
@@ -1586,6 +1593,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5103843080964879766, guid: b3e7559318c8eef4189d71335511c13e, type: 3}
+      propertyPath: m_text
+      value: Main Menu
+      objectReference: {fileID: 0}
     - target: {fileID: 5982274546523994059, guid: b3e7559318c8eef4189d71335511c13e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -1598,6 +1609,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1235037414}
+    - target: {fileID: 8202281823469163492, guid: b3e7559318c8eef4189d71335511c13e, type: 3}
+      propertyPath: m_Name
+      value: MainMenu
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1633,7 +1648,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7623716023995995545, guid: e0fc173472617414a8c39ec38c2a5500, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -955.3081
+      value: -955.373
       objectReference: {fileID: 0}
     - target: {fileID: 7623716023995995545, guid: e0fc173472617414a8c39ec38c2a5500, type: 3}
       propertyPath: m_LocalPosition.y

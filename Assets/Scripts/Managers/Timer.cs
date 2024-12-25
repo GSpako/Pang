@@ -32,7 +32,7 @@ public class Timer : MonoBehaviour
     RTDESKEngine Engine;   //Shortcut
     [SerializeField]
     TextMeshProUGUI text;
-
+    MessageManager gameManager;
     public int totalTime = 0;
     bool paused = false;
 
@@ -103,6 +103,12 @@ public class Timer : MonoBehaviour
 
                                 if((currentTime - 1) == 0)
                                 {
+                                    gameManager = RTDESKEntity.getMailBox("GameManager");
+
+                                    Action ActMsg;
+                                    ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
+                                    ActMsg.action = (int)UserActions.End;
+                                    Engine.SendMsg(ActMsg, gameObject, gameManager, tenMillis);
 
                                     Engine.PushMsg(Msg);
                                 }

@@ -115,14 +115,15 @@ public class Hook : MonoBehaviour
                                 }
                                 else
                                 {
-                                    Debug.Log("growing");
                                     height += growRate;
                                     spriteRenderer.size = new Vector2(spriteRenderer.size.x, height);// height;
                                     Engine.SendMsg(Msg,gameObject,ReceiveMessage, tenMillis);
                                 }
                             }
                             else
+                            {
                                 Engine.PushMsg(Msg);
+                            }
 
                             break;
 
@@ -130,9 +131,6 @@ public class Hook : MonoBehaviour
 
                            
                             height = MIN_HEIGHT;
-                            Debug.Log("height: " + height);
-
-                            Engine.PushMsg(Msg);
 
                             Action growMsg;
                             growing = true;
@@ -141,6 +139,8 @@ public class Hook : MonoBehaviour
                             growMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
                             growMsg.action = (int)HookActions.Grow;
                             Engine.SendMsg(growMsg, gameObject, ReceiveMessage, tenMillis);
+
+                            Engine.PushMsg(Msg);
                             break;
 
                         case (int)HookActions.Destroy:
@@ -179,6 +179,7 @@ public class Hook : MonoBehaviour
             spriteRenderer.size = new Vector2(spriteRenderer.size.x, MIN_HEIGHT);// height;
             ObjectMsg a = (ObjectMsg)Engine.PopMsg((int)UserMsgTypes.Object);
             a.o = this.gameObject;
+            growing = false;
             Engine.SendMsg(a, HookPoolobj, hookPoolMail, tenMillis);
         }
 

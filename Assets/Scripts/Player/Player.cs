@@ -32,7 +32,6 @@ public class Player : MonoBehaviour
     bool shooting = false;
     MessageManager gunMailBox;
 
-    public float reloadTime = 0;
     bool paused = false;
 
     [SerializeField]
@@ -64,7 +63,6 @@ public class Player : MonoBehaviour
         tenMillis = Engine.ms2Ticks(10);
         fiftyMillis = Engine.ms2Ticks(50);
         oneSecond = Engine.ms2Ticks(1000);
-        reloadTimeHRT = Engine.ms2Ticks(reloadTime);
 
         //Send the start message
         Action ActMsg;
@@ -95,12 +93,6 @@ public class Player : MonoBehaviour
                             
                             //Mark the player as shooting
                             shooting = true;
-
-                            //Send a msg to enable movement and shooting again in the specified time
-                            Action ActMsg;
-                            ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
-                            ActMsg.action = (int)PlayerActions.StopShooting;
-                            Engine.SendMsg(ActMsg, gameObject, ReceiveMessage, reloadTimeHRT);
                         }
                         else
                         {
@@ -163,7 +155,6 @@ public class Player : MonoBehaviour
                     switch ((int)a.action)
                     {
                         case (int)PlayerActions.StopShooting:
-                            shooting = false;
                             break;
                         case (int)PlayerActions.Sleep:
                             break;
@@ -194,6 +185,10 @@ public class Player : MonoBehaviour
                             break;
                         case (int)UserActions.Move:
                             paused = false;
+                            break;
+                        case (int)UserActions.LiveState:
+                            Debug.Log("recived");
+                            shooting = false;
                             break;
                     }
                     Engine.PushMsg(Msg);

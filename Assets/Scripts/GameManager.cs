@@ -146,6 +146,8 @@ public class GameManager : MonoBehaviour
         ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
         ActMsg.action = (int)UserActions.GetSteady;
         Engine.SendMsg(ActMsg, gameObject, playerMailBox, HRTimer.HRT_INMEDIATELY);
+        ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
+        ActMsg.action = (int)UserActions.GetSteady;
         Engine.SendMsg(ActMsg, gameObject, timerMailBox, HRTimer.HRT_INMEDIATELY);
     }
 
@@ -161,6 +163,8 @@ public class GameManager : MonoBehaviour
         ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
         ActMsg.action = (int)UserActions.Move;
         Engine.SendMsg(ActMsg, gameObject, playerMailBox, HRTimer.HRT_INMEDIATELY);
+        ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
+        ActMsg.action = (int)UserActions.Move;
         Engine.SendMsg(ActMsg, gameObject, timerMailBox, HRTimer.HRT_INMEDIATELY);
     }
     public void ExitGame()

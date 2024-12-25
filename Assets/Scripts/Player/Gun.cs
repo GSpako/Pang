@@ -82,9 +82,6 @@ public class Gun : MonoBehaviour
                     switch ((int)a.action)
                     {
                         case (int)GunActions.Shoot:
-                            //Instantiate(Hook, transform.position, transform.rotation);
-
-                                        
 
                             Transform ActMsg = (Transform)Engine.PopMsg((int)UserMsgTypes.Position);
                             ActMsg.V3 = this.gameObject.transform.position;
