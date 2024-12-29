@@ -187,3 +187,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   growRate: 0.2
   Engine: {fileID: 0}
+  clip: {fileID: 8300000, guid: 0fc6f7aa770b9184d804d993fe8a2e66, type: 3}

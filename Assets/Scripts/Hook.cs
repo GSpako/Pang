@@ -39,9 +39,12 @@ public class Hook : MonoBehaviour
     RTDESKEngine Engine;   //Shortcut
     SpriteRenderer spriteRenderer;
 
-    MessageManager hookPoolMail;
+    MessageManager hookPoolMail, audioPoolMail;
 
-    GameObject HookPoolobj;
+    GameObject HookPoolobj, AudioPoolObj;
+
+    [SerializeField]
+    AudioClip clip;
 
     private void Awake()
     {
@@ -67,6 +70,8 @@ public class Hook : MonoBehaviour
         //routes and mailbox
         HookPoolobj = GameObject.Find("/Managers/HookPool");
         hookPoolMail = RTDESKEntity.getMailBox("HookPool");
+        AudioPoolObj = GameObject.Find("/Managers/SoundManager");
+        audioPoolMail = RTDESKEntity.getMailBox("SoundManager");
         
         MIN_HEIGHT = spriteRenderer.size.y;
     }
@@ -181,6 +186,10 @@ public class Hook : MonoBehaviour
             a.o = this.gameObject;
             growing = false;
             Engine.SendMsg(a, HookPoolobj, hookPoolMail, tenMillis);
+
+            AudioMsg au = (AudioMsg)Engine.PopMsg((int)UserMsgTypes.Audio);
+            au.audio = clip;
+            Engine.SendMsg(au, AudioPoolObj, audioPoolMail, tenMillis);
         }
 
 
