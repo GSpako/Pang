@@ -32,6 +32,9 @@ public class Ball : MonoBehaviour
     Rigidbody2D rg;
     public GameObject BallPrefab;
 
+    MessageManager gameManagerMail;
+    GameObject gameManagerObj;
+
     private void Awake()
     {
         //Assign the "listener" to the normalized component RTDESKEntity. Every gameObject that wants to receive a message must have a public mailbox
@@ -50,6 +53,8 @@ public class Ball : MonoBehaviour
         tenMillis = Engine.ms2Ticks(10);
         oneSecond = Engine.ms2Ticks(1000);
 
+        gameManagerObj = GameObject.Find("/Managers/GameManager");
+        gameManagerMail = RTDESKEntity.getMailBox("GameManager");
         //Get a new message to activate a new action in the object
         ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
         ActMsg.action = (int)BallActions.Start;
@@ -107,12 +112,12 @@ public class Ball : MonoBehaviour
                                 b1.transform.localScale = new Vector3(scale.x / 2, scale.y / 2, scale.z / 2);
                                 b1.transform.position = new Vector3(transform.position.x + ((scale.x / 4) + (scale.x / 2) * 0.2f), transform.position.y, transform.position.z);
                                 
-                                b1.GetComponent<Ball>().vel = new Vector2(-vel.x, vel.y);
+                                
 
                                 GameObject b2 = Instantiate(BallPrefab, transform.position, Quaternion.identity);
                                 b2.transform.localScale = new Vector3(scale.x / 2, scale.y / 2, scale.z / 2);
                                 b2.transform.position = new Vector3(transform.position.x - ((scale.x / 4) + (scale.x / 2) * 0.2f), transform.position.y, transform.position.z);
-                                
+                                b2.GetComponent<Ball>().vel = new Vector2(-vel.x, vel.y);
                                 //Destroy the current sphere
                                 Engine.PushMsg(Msg);
                                 Destroy(gameObject);
@@ -141,7 +146,7 @@ public class Ball : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag != "Hook") return;
+        if (other.gameObject.tag == "Hook") {
 
         //Destroy the ball, split it in half like it should
         Action destroyMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
@@ -154,6 +159,11 @@ public class Ball : MonoBehaviour
         Action destroyhookMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
         destroyhookMsg.action = (int)HookActions.Destroy;
         Engine.SendMsg(destroyhookMsg, other.gameObject, hookMailBox, tenMillis);
-
+        }
+        else if (other.gameObject.tag == "Player"){
+            Action endGameMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
+            endGameMsg.action = (int)UserActions.End;
+            Engine.SendMsg(endGameMsg, gameManagerObj, gameManagerMail, tenMillis);
+        }
     }
 }
