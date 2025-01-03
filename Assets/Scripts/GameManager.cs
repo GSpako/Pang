@@ -28,7 +28,9 @@ public class GameManager : MonoBehaviour
 
     public GameObject pauseMenu;
     public GameObject DeathMenu;
+    public GameObject VictoryMenu;
 
+    public int numLeft = 8;
     bool isPaused = false;
 
     [SerializeField]
@@ -95,6 +97,14 @@ public class GameManager : MonoBehaviour
                 switch ((int)a.action)
                 {
                     case (int)UserActions.Start:
+
+                        break;
+                    case (int)UserActions.Move:
+                        numLeft--;
+                        if (numLeft == 0)
+                        {
+                            Victory();
+                        }
                         break;
                     case (int)UserActions.End:
                         Death();
@@ -111,6 +121,20 @@ public class GameManager : MonoBehaviour
         ded = true;
         DeathMenu.SetActive(true);
         Time.timeScale = 0; 
+        isPaused = true;
+
+        Action ActMsg;
+        ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
+        ActMsg.action = (int)UserActions.GetSteady;
+        Engine.SendMsg(ActMsg, gameObject, playerMailBox, HRTimer.HRT_INMEDIATELY);
+        Engine.SendMsg(ActMsg, gameObject, timerMailBox, HRTimer.HRT_INMEDIATELY);
+    }
+
+    void Victory()
+    {
+        ded = true;
+        VictoryMenu.SetActive(true);
+        Time.timeScale = 0;
         isPaused = true;
 
         Action ActMsg;

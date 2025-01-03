@@ -16,7 +16,8 @@ using HRT_Time = System.Int64;
 using System;
 using UnityEngine;
 using static MsgContent;
-enum BallActions { Start, Destroy }
+using UnityEngine.UIElements;
+enum BallActions { Start, Destroy, AdjustSpeed }
 
 // CubeReceiveMessage requires the GameObject to have a RTDESKEntity component
 [RequireComponent(typeof(RTDESKEntity))]
@@ -78,6 +79,7 @@ public class Ball : MonoBehaviour
             case (int)RTDESKMsgTypes.Input:
                 break;
             case (int)UserMsgTypes.Position:
+
                 break;
             case (int)UserMsgTypes.Rotation:
                 break;
@@ -88,14 +90,32 @@ public class Ball : MonoBehaviour
             case (int)UserMsgTypes.Action:
                 Action a;
                 a = (Action)Msg;
+                Action ActMsg;
                 //Sending automessage
                 if (name == Msg.Sender.name)
                     switch ((int)a.action)
                     {
                         case (int)BallActions.Start:
+
                             //Initialize the object speed
                             rg.velocity = vel;
-
+                            /*
+                            ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
+                            ActMsg.action = (int)BallActions.Start;
+                            Engine.SendMsg(ActMsg, gameObject, ReceiveMessage, tenMillis);
+                            */
+                            break;
+                        case (int)BallActions.AdjustSpeed:
+                            /*
+                            if (Mathf.Abs(rg.velocity.x) > 0.4)
+                            {
+                                if (rg.velocity.x > 0)
+                                    rg.velocity = new Vector2(0.4f, rg.velocity.y);
+                                else
+                                    rg.velocity = new Vector2(-0.4f, rg.velocity.y);
+                            }
+                            Engine.SendMsg(Msg, tenMillis);
+                            */
                             break;
                         case (int)BallActions.Destroy:
                             //Destroy the ball
@@ -105,6 +125,12 @@ public class Ball : MonoBehaviour
                             {
                                 Engine.PushMsg(Msg);
                                 Destroy(gameObject);
+
+                                ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
+                                ActMsg.action = (int)UserActions.Move;
+                                Engine.SendMsg(ActMsg, gameObject, gameManagerMail, halfSecond);
+
+
                             }
                             else //if big enough split the ball into two, and make them move into opossite directions
                             {
