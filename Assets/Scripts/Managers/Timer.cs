@@ -16,8 +16,6 @@ using HRT_Time = System.Int64;
 
 using UnityEngine;
 using TMPro;
-using Unity.VisualScripting.Antlr3.Runtime;
-using UnityEditor.XR;
 enum TimerActions { Start, Update, End}
 
 // CubeReceiveMessage requires the GameObject to have a RTDESKEntity component
@@ -49,6 +47,7 @@ public class Timer : MonoBehaviour
         Engine = GetComponent<RTDESKEntity>().RTDESKEngineScript;
         RTDESKInputManager IM = Engine.GetInputManager();
 
+        gameManager = RTDESKEntity.getMailBox("GameManager");
 
         Action ActMsg;
         ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
@@ -83,6 +82,7 @@ public class Timer : MonoBehaviour
                     switch ((int)a.action)
                     {
                         case (int)TimerActions.Start:
+                            // Initialize the text, and start the constant update every second
                             text.text = totalTime.ToString();
 
                             Action act;
@@ -92,19 +92,17 @@ public class Timer : MonoBehaviour
                             break;
                         
                         case (int)TimerActions.Update:// Update the text, if  time has run out, send mesage to stop game
-                            if(paused)
+                            if(paused) //if paused, try again after one second
                             {
                                 Engine.SendMsg(Msg, oneSecond);
                             }
                             else 
-                            { 
+                            {  // if not paused, update the timer
                                 int currentTime = int.Parse(text.text);
                                 text.text = (currentTime - 1).ToString();
 
-                                if((currentTime - 1) == 0)
+                                if((currentTime - 1) == 0) //if the current time is 0, lose the game
                                 {
-                                    gameManager = RTDESKEntity.getMailBox("GameManager");
-
                                     Action ActMsg;
                                     ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
                                     ActMsg.action = (int)UserActions.End;
@@ -113,8 +111,8 @@ public class Timer : MonoBehaviour
                                     Engine.PushMsg(Msg);
                                 }
                                 else 
-                                {
-                                    Engine.SendMsg(Msg, oneSecond);
+                                {// if there is more time left, update again after another second
+                                    Engine.SendMsg(Msg, oneSecond); 
                                 }
                             }
                             break;
@@ -129,10 +127,10 @@ public class Timer : MonoBehaviour
                 {
                     switch ((int)a.action)
                     {
-                        case (int)UserActions.GetSteady: //Stop the movement of the object
+                        case (int)UserActions.GetSteady: //Stop the timer when pausing
                             paused = true;
                             break;
-                        case (int)UserActions.Move:
+                        case (int)UserActions.Move: //Renable the timer when unpausing
                             paused = false;
                             break;
                     }

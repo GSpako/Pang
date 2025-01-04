@@ -113,13 +113,13 @@ public class Hook : MonoBehaviour
                             }
                             else if (growing)
                             {
-                                if (height > 43.43f)
+                                if (height > 43.43f)// limit growth of the hook, this way it doest go outside the map
                                 {
                                     DestroyHook();
                                     Engine.PushMsg(Msg);
                                 }
                                 else
-                                {
+                                { // grow the hook each call
                                     height += growRate;
                                     spriteRenderer.size = new Vector2(spriteRenderer.size.x, height);// height;
                                     Engine.SendMsg(Msg,gameObject,ReceiveMessage, tenMillis);
@@ -132,7 +132,7 @@ public class Hook : MonoBehaviour
 
                             break;
 
-                        case (int)HookActions.Start:
+                        case (int)HookActions.Start: // start the hook
 
                            
                             height = MIN_HEIGHT;
@@ -148,7 +148,7 @@ public class Hook : MonoBehaviour
                             Engine.PushMsg(Msg);
                             break;
 
-                        case (int)HookActions.Destroy:
+                        case (int)HookActions.Destroy: // destroy the hook
                             //Debug.Log("Destroying Hook");
                             DestroyHook();
                             
@@ -166,7 +166,7 @@ public class Hook : MonoBehaviour
 
                             break;
 
-                        case (int)UserActions.End:
+                        case (int)UserActions.End: //destroy the hook
                             DestroyHook();
                             break;
 
@@ -178,8 +178,6 @@ public class Hook : MonoBehaviour
 
         void DestroyHook()
         {
-            //Destroy(gameObject);
-
             //Necesitaba un tipo disponible para mandar el mensaje, asi que Object
             spriteRenderer.size = new Vector2(spriteRenderer.size.x, MIN_HEIGHT);// height;
             ObjectMsg a = (ObjectMsg)Engine.PopMsg((int)UserMsgTypes.Object);

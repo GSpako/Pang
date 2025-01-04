@@ -64,15 +64,15 @@ public class GameManager : MonoBehaviour
                 switch (IMsg.c)
                 {
 
-                    case KeyCode.P:
+                    case KeyCode.P: 
                         if (KeyState.DOWN == IMsg.s)
                         {
-                            if (isPaused)
+                            if (isPaused)//unpause the game
                             {
                                 isPaused = false;
                                 Unpause();
                             }
-                            else
+                            else// pause the game
                             {
                                 isPaused = true;
                                 Pause();
@@ -99,14 +99,14 @@ public class GameManager : MonoBehaviour
                     case (int)UserActions.Start:
 
                         break;
-                    case (int)UserActions.Move:
+                    case (int)UserActions.Move: // this msg is used to update the remaining number of balls to be destroyed before winning the game
                         numLeft--;
                         if (numLeft == 0)
                         {
                             Victory();
                         }
                         break;
-                    case (int)UserActions.End:
+                    case (int)UserActions.End: // end the game
                         Death();
                         break;
                 }
@@ -195,7 +195,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Exiting game...");
         // Stop the simulation in the Unity Editor
-        UnityEditor.EditorApplication.isPlaying = false;
+        //UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();
     }
 }

@@ -54,9 +54,9 @@ public class Player : MonoBehaviour
         RTDESKInputManager IM = Engine.GetInputManager();
 
         //Register keys that we want to be signaled in case the user press them
-        IM.RegisterKeyCode(ReceiveMessage, KeyCode.W);
-        IM.RegisterKeyCode(ReceiveMessage, KeyCode.A);
-        IM.RegisterKeyCode(ReceiveMessage, KeyCode.D);
+        IM.RegisterKeyCode(ReceiveMessage, KeyCode.W); //shoot gun
+        IM.RegisterKeyCode(ReceiveMessage, KeyCode.A); //move left
+        IM.RegisterKeyCode(ReceiveMessage, KeyCode.D); //,pve rogjt
 
         //Create cariables for sendTime
         halfSecond = Engine.ms2Ticks(500);
@@ -91,14 +91,8 @@ public class Player : MonoBehaviour
                             gunMsg.action = (int)UserActions.Start;
                             Engine.SendMsg(gunMsg, gameObject, gunMailBox, HRTimer.HRT_INMEDIATELY);
                             
-                            //Mark the player as shooting
+                            //Mark the player as shooting, so it cant move during the cooldown
                             shooting = true;
-                        }
-                        else
-                        {
-                            //gunMsg.action = (int)UserActions.End;
-                            //Engine.SendMsg(gunMsg, gameObject, gunMailBox, HRTimer.HRT_INMEDIATELY);
-                            //shooting = false;
                         }
                         break;
 
@@ -130,6 +124,7 @@ public class Player : MonoBehaviour
                     //Move the character, limit the movement to the screen/lvl bounds
                     Vector3 pos = transform.position;
 
+                    //limit the movement so it doesnt go outside the map
                     if (transform.position.x > 1.53f)
                         pos.x = 1.53f;
                     if (transform.position.x < -1.53f)
@@ -180,13 +175,13 @@ public class Player : MonoBehaviour
                 {
                     switch ((int)a.action)
                     {
-                        case (int)UserActions.GetSteady: //Stop the movement of the object
+                        case (int)UserActions.GetSteady: //Stop the movement of the object when pausing
                             paused = true;
                             break;
-                        case (int)UserActions.Move:
+                        case (int)UserActions.Move: //Renable the movement of the object when pausing
                             paused = false;
                             break;
-                        case (int)UserActions.LiveState:
+                        case (int)UserActions.LiveState: // Renable movement after the shooting coldown is over
                             Debug.Log("recived");
                             shooting = false;
                             break;

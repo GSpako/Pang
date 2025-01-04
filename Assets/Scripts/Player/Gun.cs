@@ -82,7 +82,7 @@ public class Gun : MonoBehaviour
                     switch ((int)a.action)
                     {
                         case (int)GunActions.Shoot:
-
+                            // send a mesage to the hook pool, to create the hook
                             Transform ActMsg = (Transform)Engine.PopMsg((int)UserMsgTypes.Position);
                             ActMsg.V3 = this.gameObject.transform.position;
                             Engine.SendMsg(ActMsg, HookPoolobj, hookPoolMail, tenMillis);
@@ -102,7 +102,7 @@ public class Gun : MonoBehaviour
                     switch ((int)a.action)
                     {
                         case (int)UserActions.Start: //Shoot
-                            // Send a msg to the self msg shoot action
+                            // Send a msg to the self msg shoot action to shoot the gun
                             Action ActMsg;
                             ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
                             ActMsg.action = (int)GunActions.Shoot;

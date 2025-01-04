@@ -99,23 +99,10 @@ public class Ball : MonoBehaviour
 
                             //Initialize the object speed
                             rg.velocity = vel;
-                            /*
-                            ActMsg = (Action)Engine.PopMsg((int)UserMsgTypes.Action);
-                            ActMsg.action = (int)BallActions.Start;
-                            Engine.SendMsg(ActMsg, gameObject, ReceiveMessage, tenMillis);
-                            */
+                            
                             break;
                         case (int)BallActions.AdjustSpeed:
-                            /*
-                            if (Mathf.Abs(rg.velocity.x) > 0.4)
-                            {
-                                if (rg.velocity.x > 0)
-                                    rg.velocity = new Vector2(0.4f, rg.velocity.y);
-                                else
-                                    rg.velocity = new Vector2(-0.4f, rg.velocity.y);
-                            }
-                            Engine.SendMsg(Msg, tenMillis);
-                            */
+                            
                             break;
                         case (int)BallActions.Destroy:
                             //Destroy the ball
@@ -134,12 +121,13 @@ public class Ball : MonoBehaviour
                             }
                             else //if big enough split the ball into two, and make them move into opossite directions
                             {
+                                //Create a new ball, and move it to the side, add the apropiate speed
                                 GameObject b1 = Instantiate(BallPrefab, transform.position, Quaternion.identity);
                                 b1.transform.localScale = new Vector3(scale.x / 2, scale.y / 2, scale.z / 2);
                                 b1.transform.position = new Vector3(transform.position.x + ((scale.x / 4) + (scale.x / 2) * 0.2f), transform.position.y, transform.position.z);
-                                
-                                
 
+
+                                //Create a another ball, and move it to the other side, add the opsite speed
                                 GameObject b2 = Instantiate(BallPrefab, transform.position, Quaternion.identity);
                                 b2.transform.localScale = new Vector3(scale.x / 2, scale.y / 2, scale.z / 2);
                                 b2.transform.position = new Vector3(transform.position.x - ((scale.x / 4) + (scale.x / 2) * 0.2f), transform.position.y, transform.position.z);
