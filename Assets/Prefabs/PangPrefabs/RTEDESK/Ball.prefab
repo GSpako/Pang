@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7623716023995995545}
   - component: {fileID: 6311385277052980416}
-  - component: {fileID: 8500441251943772180}
   - component: {fileID: 7572529265326020440}
   - component: {fileID: 878004614787364930}
+  - component: {fileID: 5112205126763317227}
+  - component: {fileID: 5878847338048549145}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -87,20 +88,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8500441251943772180
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2491160401884742846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d50bf35bd56334b4a836103fc818e42b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  vel: {x: 0.4, y: 0}
-  BallPrefab: {fileID: 2491160401884742846}
 --- !u!58 &7572529265326020440
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -163,3 +150,31 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
+--- !u!114 &5112205126763317227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2491160401884742846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 524a90fcdc4965948a8da32ee97a788a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RTDESKEngineScript: {fileID: 0}
+--- !u!114 &5878847338048549145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2491160401884742846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f85f2f750161ed40ac24f82e882f199, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vel: {x: 0.4, y: 0}
+  Engine: {fileID: 0}
+  BallPrefab: {fileID: 2491160401884742846}
