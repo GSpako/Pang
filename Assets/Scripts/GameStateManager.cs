@@ -44,6 +44,11 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
+    public void DestroyedSoundEffect()
+    {
+        soundSource.PlayOneShot(ballDestroyed);
+    }
+
     public void RemoveBall()
     {
         numLeft--;

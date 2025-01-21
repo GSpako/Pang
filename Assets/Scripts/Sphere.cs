@@ -28,9 +28,11 @@ public class Sphere : MonoBehaviour
         if (other.gameObject.TryGetComponent<PlayerController>(out PlayerController p))
         {
             gameManager.Death();
+            gameManager.DestroyedSoundEffect();
         }
         else if (other.gameObject.TryGetComponent<Gancho>(out Gancho g))
         {
+            gameManager.DestroyedSoundEffect();
             Destroy(g.gameObject);
             DestroyBall();
         }
