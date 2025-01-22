@@ -21,10 +21,10 @@ public class GameStateManager : MonoBehaviour
     private void Start()
     {
         Time.timeScale = 1;
-        soundSource = this.gameObject.AddComponent<AudioSource>();
+        /*soundSource = this.gameObject.AddComponent<AudioSource>();
         soundSource.clip = music;
         soundSource.loop = true;
-        soundSource.Play();
+        soundSource.Play();*/
     }
 
     private void Update()
@@ -46,7 +46,7 @@ public class GameStateManager : MonoBehaviour
 
     public void DestroyedSoundEffect()
     {
-        soundSource.PlayOneShot(ballDestroyed);
+        //soundSource.PlayOneShot(ballDestroyed);
     }
 
     public void RemoveBall()
@@ -54,9 +54,9 @@ public class GameStateManager : MonoBehaviour
         numLeft--;
         if (numLeft == 0)
         {
-            Victory();
+            //Victory();
         }
-        soundSource.PlayOneShot(ballDestroyed);
+        //soundSource.PlayOneShot(ballDestroyed);
     }
 
     public void Death()

@@ -1,0 +1,146 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Actuators;
+using static UnityEngine.GraphicsBuffer;
+
+public class PakoAgent : Agent
+{
+    [HideInInspector] public bool dead = false;
+
+    public GameObject ballPrefab;
+    public GameObject hookPrefab;
+    BufferSensorComponent bufferSensor;
+    public List<Rigidbody2D> spheresInScene = new List<Rigidbody2D>();
+
+    float shootingColdown = .4f;
+    float speed = .05f;
+    float lastShot;
+    float startTime = 0f;
+    SpherePool spherePool;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        bufferSensor = GetComponent<BufferSensorComponent>();
+        spherePool = transform.parent.GetComponentInChildren<SpherePool>();
+        lastShot = Time.time - shootingColdown;
+    }
+    public override void OnEpisodeBegin()
+    {
+        dead = false;
+        ballsDestroyed = 0;
+        totalBallsDestroyed = 0;
+        startTime = Time.time;
+
+        // Use 'spherePool' to return old spheres to the pool
+        foreach (Rigidbody2D sphereRb in spheresInScene)
+        {
+            if (sphereRb && sphereRb.gameObject.activeSelf)
+            {
+                spherePool.ReturnSphere(sphereRb.gameObject);
+            }
+        }
+        spheresInScene.Clear();
+
+        // Clean up any other environment objects (e.g., hooks)
+        foreach (Gancho g in transform.parent.GetComponentsInChildren<Gancho>())
+        {
+            Destroy(g.gameObject);
+        }
+
+        // Spawn a new sphere from the pool
+        float xPos = Random.Range(-1.3f, 1.3f);
+        GameObject newSphere = spherePool.GetSphere();
+        newSphere.transform.localPosition = new Vector3(xPos, 0.45f, 0f);
+        newSphere.transform.localScale = Vector3.one/2; 
+        newSphere.GetComponent<Sphere>().vel = new Vector2(0.4f, 0f);
+
+        // Randomly position the agent
+        float xPosAgent = Random.Range(-1.53f, 1.53f);
+        transform.localPosition = new Vector3(xPosAgent, transform.localPosition.y, 0);
+    }
+
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        sensor.AddObservation((Vector2)this.transform.localPosition);
+        sensor.AddObservation(Time.time - startTime);
+
+        foreach (Rigidbody2D rB in spheresInScene)
+        {
+            Vector2 relativePosition = rB.transform.position - transform.position;
+            Vector2 velocity = rB.velocity;
+
+            bufferSensor.AppendObservation(new float[] {
+            relativePosition.x, relativePosition.y,
+            velocity.x, velocity.y,
+            rB.transform.lossyScale.x
+        });
+        }
+    }
+
+    public override void OnActionReceived(ActionBuffers actionBuffers)
+    {
+        Vector2 controlSignal = Vector2.zero;
+        controlSignal.x = transform.localPosition.x + (speed * Mathf.Clamp(actionBuffers.ContinuousActions[0], -1f, 1f));
+        controlSignal.y = actionBuffers.ContinuousActions[1];
+
+        float x = Mathf.Clamp(controlSignal.x, -1.53f, 1.53f);
+        this.transform.localPosition = new Vector3(x, transform.localPosition.y, transform.localPosition.z);
+
+        if (controlSignal.y > 0 && Time.time > lastShot + shootingColdown)
+        {
+            lastShot = Time.time;
+            GameObject hook = Instantiate(hookPrefab, transform.position - new Vector3(0, 0.08f, 0), Quaternion.identity);
+            hook.transform.SetParent(transform.parent, true);
+            AddReward(0.001f);
+        }
+
+        float wallProximity = Mathf.Min(Mathf.Abs(x - (-1.53f)), Mathf.Abs(x - 1.53f)); // Distance to the closest wall
+        if (wallProximity < 0.2f) // Adjust the threshold as needed
+        {
+            AddReward(-0.01f * (0.2f - wallProximity)); // Negative reward increases as the agent gets closer to the wall
+        }
+
+        if (ballsDestroyed > 0)
+        {
+            AddReward(0.05f * ballsDestroyed);
+            ballsDestroyed = 0;
+        }
+
+        if (totalBallsDestroyed == 8)
+        {
+            SetReward(1f);
+            EndEpisode();
+        }
+
+        if (dead)
+        {
+            EndEpisode();
+        }
+    }
+
+    public override void Heuristic(in ActionBuffers actionsOut)
+    {
+        var continuousActionsOut = actionsOut.ContinuousActions;
+        continuousActionsOut[0] = Input.GetAxis("Horizontal");
+        continuousActionsOut[1] = Input.GetAxis("Vertical");
+    }
+
+    public void AddSphere(Rigidbody2D r)
+    {
+        spheresInScene.Add(r);
+    }
+
+    public int ballsDestroyed = 0;
+    public int totalBallsDestroyed = 0;
+    public void RemoveSphere(Rigidbody2D r)
+    {
+        spheresInScene.Remove(r);
+        ballsDestroyed++;
+        totalBallsDestroyed++;
+    }
+
+}

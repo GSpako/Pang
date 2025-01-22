@@ -1,68 +1,105 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Sphere : MonoBehaviour
 {
-    GameStateManager gameManager;
-    Rigidbody2D rb;
+    public Vector2 vel = new Vector2(0.4f, .2f);
+    public GameObject ballPrefab; // Not strictly needed if all sphere creation goes through SpherePool
 
-    public Vector2 vel = new Vector2(0.4f, 0);
-    public GameObject BallPrefab;
-    // Start is called before the first frame update
-    void Start()
+    private PakoAgent pakoAgent;
+    private GameStateManager gameManager;
+    private Rigidbody2D rb;
+
+    // Initialize references on enable or start
+    void OnEnable()
     {
-        gameManager = FindAnyObjectByType<GameStateManager>();
-        rb = GetComponent<Rigidbody2D>();
+        // Because we are pooling, OnEnable might be called multiple times
+        if (pakoAgent == null)
+            pakoAgent = transform.parent.GetComponentInChildren<PakoAgent>();
+
+        if (gameManager == null)
+            gameManager = transform.parent.GetComponentInChildren<GameStateManager>();
+
+        if (rb == null)
+            rb = GetComponent<Rigidbody2D>();
+
+        // Apply current velocity
         rb.velocity = vel;
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // Inform PakoAgent of a newly "spawned" sphere
+        if (pakoAgent != null)
+        {
+            pakoAgent.AddSphere(rb);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.TryGetComponent<PlayerController>(out PlayerController p))
+        // Example collision checks
+        if (other.TryGetComponent<PlayerController>(out PlayerController p))
         {
-            gameManager.Death();
-            gameManager.DestroyedSoundEffect();
+            gameManager?.Death();
+            gameManager?.DestroyedSoundEffect();
         }
-        else if (other.gameObject.TryGetComponent<Gancho>(out Gancho g))
+        else if (other.TryGetComponent<Gancho>(out Gancho g))
         {
-            gameManager.DestroyedSoundEffect();
             Destroy(g.gameObject);
             DestroyBall();
+            gameManager?.DestroyedSoundEffect();
+        }
+        else if (other.TryGetComponent<PakoAgent>(out PakoAgent agent))
+        {
+            agent.dead = true;
         }
     }
 
     private void DestroyBall()
     {
-        Vector3 scale = gameObject.transform.localScale;
-        //If small enough destroy the ball
-        if (scale.x < .1f)
+        Vector3 scale = transform.localScale;
+
+        // If sphere is too small, return to pool
+        if (scale.x < 0.1f)
         {
-            Destroy(gameObject);
-            gameManager.RemoveBall();
+            ReturnToPool();
+            gameManager?.RemoveBall();
         }
-        else //if big enough split the ball into two, and make them move into opossite directions
+        else // Otherwise, split into two smaller spheres
         {
-            //Create a new ball, and move it to the side, add the apropiate speed
-            GameObject b1 = Instantiate(BallPrefab, transform.position, Quaternion.identity);
-            b1.transform.localScale = new Vector3(scale.x / 2, scale.y / 2, scale.z / 2);
-            b1.transform.position = new Vector3(transform.position.x + ((scale.x / 4) + (scale.x / 2) * 0.2f), transform.position.y, transform.position.z);
-
-
-            //Create a another ball, and move it to the other side, add the opsite speed
-            GameObject b2 = Instantiate(BallPrefab, transform.position, Quaternion.identity);
-            b2.transform.localScale = new Vector3(scale.x / 2, scale.y / 2, scale.z / 2);
-            b2.transform.position = new Vector3(transform.position.x - ((scale.x / 4) + (scale.x / 2) * 0.2f), transform.position.y, transform.position.z);
-            b2.GetComponent<Sphere>().vel = new Vector2(-vel.x, vel.y);
-
-            //Destroy the current sphere
-            Destroy(gameObject);
+            SplitBall(scale);
         }
     }
+
+    private void SplitBall(Vector3 scale)
+    {
+        //Debug.Log("Splitting Ball");
+
+        // Retrieve the SpherePool in the parent environment
+        SpherePool pool = transform.parent.GetComponentInChildren<SpherePool>();
+
+        // Calculate a horizontal offset for the split
+        float offsetX = (scale.x / 4f) + ((scale.x / 2f) * 0.2f);
+
+        transform.localScale = scale * 0.5f; // Halve the size
+        transform.localPosition += new Vector3(offsetX, 0f, 0f); // Shift to the right
+        rb.velocity = new Vector2(vel.x, vel.y);
+
+
+        GameObject b2 = pool.GetSphere();
+        b2.transform.localScale = scale * 0.5f;
+        b2.transform.localPosition = transform.localPosition - new Vector3(offsetX, 0f, 0f);
+        b2.GetComponent<Sphere>().vel = new Vector2(-vel.x, vel.y);
+        b2.GetComponent<Rigidbody2D>().velocity = new Vector2(-vel.x, vel.y);
+
+    }
+
+    private void ReturnToPool()
+    {
+        if (pakoAgent != null)
+        {
+            pakoAgent.RemoveSphere(rb);
+        }
+
+        SpherePool pool = transform.parent.GetComponentInChildren<SpherePool>();
+        pool.ReturnSphere(gameObject);
+    }
+
 }
