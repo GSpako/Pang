@@ -112,7 +112,7 @@ public class PakoAgent : Agent
             }
         }
 
-        AddReward(-0.15f * (missed_Hooks));
+        AddReward(-0.05f * (missed_Hooks));
         missed_Hooks = 0;
         shotHooks = 0;
 
