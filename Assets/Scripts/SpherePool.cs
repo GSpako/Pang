@@ -7,14 +7,18 @@ public class SpherePool : MonoBehaviour
     public int poolSize = 20;       // Initial number of spheres in the pool
 
     private Queue<GameObject> poolQueue = new Queue<GameObject>();
+    private HookPool hookPool;
 
     void Awake()
     {
+        hookPool = GetComponent<HookPool>();
+
         // Pre-instantiate spheres up to poolSize
         for (int i = 0; i < poolSize; i++)
         {
             GameObject sphere = Instantiate(spherePrefab, transform);
             sphere.transform.SetParent(transform.parent);
+            sphere.GetComponent<Sphere>().hookPool = hookPool;
             sphere.SetActive(false);
             poolQueue.Enqueue(sphere);
         }
@@ -40,9 +44,6 @@ public class SpherePool : MonoBehaviour
     public void ReturnSphere(GameObject sphere)
     {
         sphere.SetActive(false);
-        // Reset transform info if needed
-        sphere.transform.localPosition = Vector3.zero;
-        sphere.transform.localScale = Vector3.one;
         poolQueue.Enqueue(sphere);
     }
 

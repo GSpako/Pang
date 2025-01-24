@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7668520325186978849}
   - component: {fileID: 2685920854835801128}
+  - component: {fileID: 4351244720224101550}
   m_Layer: 0
-  m_Name: SpherePool
+  m_Name: Pools
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +46,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spherePrefab: {fileID: 1096895674515725895, guid: f9be4bf7264ec99469680944aff827ce, type: 3}
-  poolSize: 8
+  poolSize: 12
+--- !u!114 &4351244720224101550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 929587793970235034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b6921f2d220cde4a8072ba0f7265ddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hookPrefab: {fileID: 4931271114492304623, guid: 9174b737bc6c38d459d06d4270c80cbd, type: 3}
+  poolSize: 5
 --- !u!1 &2264349372524165130
 GameObject:
   m_ObjectHideFlags: 0

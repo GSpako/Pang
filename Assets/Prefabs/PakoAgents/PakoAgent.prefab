@@ -726,7 +726,7 @@ MonoBehaviour:
   MaxStep: 100000
   dead: 0
   ballPrefab: {fileID: 1096895674515725895, guid: f9be4bf7264ec99469680944aff827ce, type: 3}
-  hookPrefab: {fileID: 3972818502024388640, guid: fb62a6f45e002af4b8512cf88ff057bf, type: 3}
+  hookPrefab: {fileID: 4931271114492304623, guid: 9174b737bc6c38d459d06d4270c80cbd, type: 3}
   spheresInScene: []
   ballsDestroyed: 0
   totalBallsDestroyed: 0
@@ -743,7 +743,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 3
+    VectorObservationSize: 4
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
@@ -752,7 +752,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 3016608550a9f8049a0f4261b83a7455, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 2
   m_BehaviorType: 0
   m_BehaviorName: PakoAgent

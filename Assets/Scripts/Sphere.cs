@@ -5,6 +5,7 @@ public class Sphere : MonoBehaviour
     public Vector2 vel = new Vector2(0.4f, .2f);
     public GameObject ballPrefab; // Not strictly needed if all sphere creation goes through SpherePool
 
+    [HideInInspector] public HookPool hookPool;
     private PakoAgent pakoAgent;
     private GameStateManager gameManager;
     private Rigidbody2D rb;
@@ -40,9 +41,11 @@ public class Sphere : MonoBehaviour
             gameManager?.Death();
             gameManager?.DestroyedSoundEffect();
         }
-        else if (other.TryGetComponent<Gancho>(out Gancho g))
+        else if (other.TryGetComponent<Hook>(out Hook g))
         {
-            Destroy(g.gameObject);
+            if (!g.gameObject.activeInHierarchy) return;
+
+            hookPool.ReturnHook(other.gameObject);
             DestroyBall();
             gameManager?.DestroyedSoundEffect();
         }
@@ -70,24 +73,20 @@ public class Sphere : MonoBehaviour
 
     private void SplitBall(Vector3 scale)
     {
-        //Debug.Log("Splitting Ball");
-
         // Retrieve the SpherePool in the parent environment
         SpherePool pool = transform.parent.GetComponentInChildren<SpherePool>();
 
         // Calculate a horizontal offset for the split
         float offsetX = (scale.x / 4f) + ((scale.x / 2f) * 0.2f);
 
-        transform.localScale = scale * 0.5f; // Halve the size
-        transform.localPosition += new Vector3(offsetX, 0f, 0f); // Shift to the right
+        transform.localPosition = transform.localPosition + new Vector3(offsetX, 0f, 0f); // Shift to the right
+        transform.localScale = scale / 2f; // Halve the size
         rb.velocity = new Vector2(vel.x, vel.y);
 
-
         GameObject b2 = pool.GetSphere();
-        b2.transform.localScale = scale * 0.5f;
         b2.transform.localPosition = transform.localPosition - new Vector3(offsetX, 0f, 0f);
+        b2.transform.localScale = scale / 2f;
         b2.GetComponent<Sphere>().vel = new Vector2(-vel.x, vel.y);
-        b2.GetComponent<Rigidbody2D>().velocity = new Vector2(-vel.x, vel.y);
 
     }
 
