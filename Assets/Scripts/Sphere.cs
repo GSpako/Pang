@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class Sphere : MonoBehaviour
 {
-    public Vector2 vel = new Vector2(0.4f, .2f);
+    public Vector2 vel = new Vector2(0.4f, .4f);
     public GameObject ballPrefab; // Not strictly needed if all sphere creation goes through SpherePool
 
     [HideInInspector] public HookPool hookPool;
     private PakoAgent pakoAgent;
     private GameStateManager gameManager;
     private Rigidbody2D rb;
+    private SpherePool pool;
 
     // Initialize references on enable or start
     void OnEnable()
@@ -20,11 +21,15 @@ public class Sphere : MonoBehaviour
         if (gameManager == null)
             gameManager = transform.parent.GetComponentInChildren<GameStateManager>();
 
+        if (pool == null)
+            pool = transform.parent.GetComponentInChildren<SpherePool>();
+
         if (rb == null)
             rb = GetComponent<Rigidbody2D>();
 
         // Apply current velocity
-        rb.velocity = vel;
+        if(rb.velocity.magnitude <= 0)
+            rb.velocity = vel;
 
         // Inform PakoAgent of a newly "spawned" sphere
         if (pakoAgent != null)
@@ -73,31 +78,38 @@ public class Sphere : MonoBehaviour
 
     private void SplitBall(Vector3 scale)
     {
-        // Retrieve the SpherePool in the parent environment
         SpherePool pool = transform.parent.GetComponentInChildren<SpherePool>();
+        Vector3 originalPos = transform.localPosition;
+        float offsetX = scale.x * 0.5f;
 
-        // Calculate a horizontal offset for the split
-        float offsetX = (scale.x / 4f) + ((scale.x / 2f) * 0.2f);
+        // Move (and resize) this original sphere to the RIGHT by 'offsetX'
+        transform.localPosition = new Vector3(
+            originalPos.x + offsetX,
+            originalPos.y,
+            originalPos.z
+        );
+        transform.localScale = scale / 2f;
+        rb.velocity = new Vector2(Mathf.Abs(vel.x), vel.y);   
 
-        transform.localPosition = transform.localPosition + new Vector3(offsetX, 0f, 0f); // Shift to the right
-        transform.localScale = scale / 2f; // Halve the size
-        rb.velocity = new Vector2(vel.x, vel.y);
 
+        // Place the second sphere to the LEFT of the original position
         GameObject b2 = pool.GetSphere();
-        b2.transform.localPosition = transform.localPosition - new Vector3(offsetX, 0f, 0f);
+        b2.transform.localPosition = new Vector3(
+            originalPos.x - offsetX,
+            originalPos.y,
+            originalPos.z
+        );
         b2.transform.localScale = scale / 2f;
-        b2.GetComponent<Sphere>().vel = new Vector2(-vel.x, vel.y);
-
+        b2.GetComponent<Sphere>().rb.velocity = new Vector2(-Mathf.Abs(vel.x), vel.y);
     }
+
 
     private void ReturnToPool()
     {
-        if (pakoAgent != null)
-        {
+        if(pakoAgent != null) 
             pakoAgent.RemoveSphere(rb);
-        }
+        
 
-        SpherePool pool = transform.parent.GetComponentInChildren<SpherePool>();
         pool.ReturnSphere(gameObject);
     }
 

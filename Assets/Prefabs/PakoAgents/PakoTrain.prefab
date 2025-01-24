@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hookPrefab: {fileID: 4931271114492304623, guid: 9174b737bc6c38d459d06d4270c80cbd, type: 3}
-  poolSize: 5
+  poolSize: 4
 --- !u!1 &2264349372524165130
 GameObject:
   m_ObjectHideFlags: 0

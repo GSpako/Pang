@@ -7,6 +7,7 @@ public class SpherePool : MonoBehaviour
     public int poolSize = 20;       // Initial number of spheres in the pool
 
     private Queue<GameObject> poolQueue = new Queue<GameObject>();
+    private List<GameObject> listQueue = new List<GameObject>();
     private HookPool hookPool;
 
     void Awake()
@@ -21,6 +22,7 @@ public class SpherePool : MonoBehaviour
             sphere.GetComponent<Sphere>().hookPool = hookPool;
             sphere.SetActive(false);
             poolQueue.Enqueue(sphere);
+            listQueue.Add(sphere);
         }
     }
 
@@ -47,8 +49,14 @@ public class SpherePool : MonoBehaviour
         poolQueue.Enqueue(sphere);
     }
 
-    public bool AllInactive()
+    public bool NoneActivated()
     {
-        return poolQueue.Count == poolSize;
+        foreach (GameObject s in listQueue)
+        {
+            if (s.activeInHierarchy) 
+                return false; 
+        }
+
+        return true;
     }
 }

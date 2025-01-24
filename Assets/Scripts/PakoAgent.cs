@@ -15,11 +15,12 @@ public class PakoAgent : Agent
     public int missed_Hooks = 0;
 
     float lastShot;
-    float shotCD = 0.20f;
+    float shotCD = 0.75f;
     float speed = .05f;
     float startTime = 0f;
     SpherePool spherePool;
     HookPool hookPool;
+    int shotHooks = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +35,7 @@ public class PakoAgent : Agent
         dead = false;
         ballsDestroyed = 0;
         totalBallsDestroyed = 0;
+        shotHooks = 0;  
         startTime = Time.time;
         lastShot = Time.time - shotCD;
 
@@ -106,16 +108,13 @@ public class PakoAgent : Agent
                 lastShot = Time.time;
                 GameObject hook = hookPool.GetHook();
                 hook.transform.position = transform.position - new Vector3(0, 0.08f, 0);
-                AddReward(0.001f);
-            }
-            else 
-            {
-                AddReward(-0.001f);
+                shotHooks++;
             }
         }
 
-        AddReward(-0.01f * missed_Hooks);
+        AddReward(-0.15f * (missed_Hooks));
         missed_Hooks = 0;
+        shotHooks = 0;
 
         float wallProximity = Mathf.Min(Mathf.Abs(x - (-1.53f)), Mathf.Abs(x - 1.53f)); // Distance to the closest wall
         if (wallProximity < 0.2f) // Adjust the threshold as needed
@@ -125,11 +124,11 @@ public class PakoAgent : Agent
 
         if (ballsDestroyed > 0)
         {
-            AddReward(0.05f * ballsDestroyed);
+            AddReward(0.1f * ballsDestroyed);
             ballsDestroyed = 0;
         }
 
-        if (totalBallsDestroyed >= 8 && spherePool.AllInactive())
+        if (totalBallsDestroyed >= 1 && spherePool.NoneActivated())
         {
             SetReward(1f);
             EndEpisode();
