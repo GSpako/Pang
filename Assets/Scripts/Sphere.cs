@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class Sphere : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class Sphere : MonoBehaviour
 
     [HideInInspector] public HookPool hookPool;
     private PakoAgent pakoAgent;
+    private CarlosAgent carlosAgent;
     private GameStateManager gameManager;
     private Rigidbody2D rb;
     private SpherePool pool;
@@ -16,7 +18,13 @@ public class Sphere : MonoBehaviour
     {
         // Because we are pooling, OnEnable might be called multiple times
         if (pakoAgent == null)
-            pakoAgent = transform.parent.GetComponentInChildren<PakoAgent>();
+            try{
+                pakoAgent = transform.parent.GetComponentInChildren<PakoAgent>();
+            }catch(Exception e){}
+        if(carlosAgent == null)
+            try{
+                carlosAgent = transform.parent.GetComponentInChildren<CarlosAgent>();
+            }catch(Exception e){}
 
         if (gameManager == null)
             gameManager = transform.parent.GetComponentInChildren<GameStateManager>();
@@ -35,6 +43,10 @@ public class Sphere : MonoBehaviour
         if (pakoAgent != null)
         {
             pakoAgent.AddSphere(rb);
+        }
+        if (carlosAgent != null)
+        {
+            carlosAgent.AddSphere(rb);
         }
     }
 
@@ -57,6 +69,10 @@ public class Sphere : MonoBehaviour
         else if (other.TryGetComponent<PakoAgent>(out PakoAgent agent))
         {
             agent.dead = true;
+        }
+        else if (other.TryGetComponent<CarlosAgent>(out CarlosAgent agent2))
+        {
+            agent2.dead = true;
         }
     }
 
@@ -108,7 +124,8 @@ public class Sphere : MonoBehaviour
     {
         if(pakoAgent != null) 
             pakoAgent.RemoveSphere(rb);
-        
+        if(carlosAgent != null) 
+            carlosAgent.RemoveSphere(rb);
 
         pool.ReturnSphere(gameObject);
     }
