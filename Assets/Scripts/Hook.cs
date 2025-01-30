@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.MLAgents;
 using UnityEngine;
+using System;
 
 public class Hook : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class Hook : MonoBehaviour
     float height = 0f;
     Vector3 correctScale = Vector3.zero;
     private PakoAgent pakoAgent;
+    private CarlosAgent carlosAgent;
 
     private void OnEnable()
     {
@@ -23,7 +25,11 @@ public class Hook : MonoBehaviour
             spriteRenderer = GetComponent<SpriteRenderer>();
 
         if(pakoAgent == null)
-            pakoAgent = transform.parent.GetComponentInChildren<PakoAgent>();
+            try{pakoAgent = transform.parent.GetComponentInChildren<PakoAgent>();
+            }catch (Exception e){}
+        if(carlosAgent == null)
+            try{carlosAgent = transform.parent.GetComponentInChildren<CarlosAgent>();
+            }catch (Exception e){}
 
         height = 0.01f;
         transform.localScale = correctScale;
@@ -42,7 +48,11 @@ public class Hook : MonoBehaviour
 
         if (height > 43.43f)// limit growth of the hook, this way it doest go outside the map
         {
-            pakoAgent.missed_Hooks++; 
+            if(pakoAgent != null)
+                pakoAgent.missed_Hooks++; 
+            if(carlosAgent != null)
+                carlosAgent.missed_Hooks++;     
+            
             pool.ReturnHook(gameObject);
         }
         else

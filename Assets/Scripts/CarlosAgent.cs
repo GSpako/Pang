@@ -5,6 +5,7 @@ using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
 
+
 public class CarlosAgent : Agent
 {
 
@@ -24,6 +25,9 @@ public class CarlosAgent : Agent
     
     int shotHooks = 0;
 
+    float eltime;
+    float lastTime;
+
     public int ballsDestroyed = 0;
     public int totalBallsDestroyed = 0;
 
@@ -39,6 +43,8 @@ public class CarlosAgent : Agent
         dead = false;
         ballsDestroyed = 0;
         totalBallsDestroyed = 0;
+        eltime = 0;
+        lastTime = 0;
         shotHooks = 0;  
         startTime = Time.time;
         lastShot = Time.time - shotCD;
@@ -117,30 +123,36 @@ public class CarlosAgent : Agent
             }
         }
 
-        AddReward(-0.05f * (missed_Hooks));
-        missed_Hooks = 0;
-        shotHooks = 0;
+        eltime = Time.time - lastTime;
+        lastTime = Time.time;
+        AddReward(-0.01f * eltime);
 
-        float wallProximity = Mathf.Min(Mathf.Abs(x - (-1.53f)), Mathf.Abs(x - 1.53f)); // Distance to the closest wall
-        if (wallProximity < 0.2f) // Adjust the threshold as needed
+
+        float xabs = Mathf.Abs(x);
+        AddReward(0.02f*(1.0f/(xabs+1.0f)-1.0f));
+
+        foreach (Rigidbody2D rB in spheresInScene)
         {
-            AddReward(-0.01f * (0.2f - wallProximity)); // Negative reward increases as the agent gets closer to the wall
+            if (checkColision(rB,0.25f)){
+                AddReward(-0.05f);
+            }
         }
 
         if (ballsDestroyed > 0)
         {
-            AddReward(0.1f * ballsDestroyed);
+            AddReward(0.5f * ballsDestroyed);
             ballsDestroyed = 0;
         }
 
         if (totalBallsDestroyed >= 1 && spherePool.NoneActivated())
         {
-            SetReward(1f);
+            SetReward(2f);
             EndEpisode();
         }
 
         if (dead)
         {
+            SetReward(-1f);
             EndEpisode();
         }
     }
@@ -162,6 +174,23 @@ public class CarlosAgent : Agent
         spheresInScene.Remove(r);
         ballsDestroyed++;
         totalBallsDestroyed++;
+    }
+
+    bool checkColision(Rigidbody2D r, float margin = 0.5f){
+        float agentposX = this.transform.localPosition.x;
+        float Vx = r.velocity.x;
+        float Vy = r.velocity.y; 
+        //la gravedad está puesta como 0.5 asi que la mitad de 10 es 5
+        float Ay = 5.0f;
+        float X0 = r.transform.localPosition.x;
+        float Y0 = r.transform.localPosition.y;
+
+        float t = (float)(-Vy - Mathf.Sqrt(Mathf.Pow(Vy,2)+2.0f*Ay*Y0))/(float)(Ay);
+        float x = X0 + Vx*t;
+
+        if((this.transform.localPosition.x - x) < margin && (-this.transform.localPosition.x + x) < margin)
+            return true;
+        return false;
     }
 
 }
