@@ -23,7 +23,6 @@ public class CarlosAgent : Agent
     SpherePool spherePool;
     HookPool hookPool;
     
-    int shotHooks = 0;
 
     float eltime;
     float lastTime;
@@ -45,7 +44,6 @@ public class CarlosAgent : Agent
         totalBallsDestroyed = 0;
         eltime = 0;
         lastTime = 0;
-        shotHooks = 0;  
         startTime = Time.time;
         lastShot = Time.time - shotCD;
 
@@ -119,40 +117,39 @@ public class CarlosAgent : Agent
                 lastShot = Time.time;
                 GameObject hook = hookPool.GetHook();
                 hook.transform.position = transform.position - new Vector3(0, 0.08f, 0);
-                shotHooks++;
             }
         }
 
-        eltime = Time.time - lastTime;
-        lastTime = Time.time;
-        AddReward(-0.01f * eltime);
+        //eltime = Time.time - lastTime;
+        //lastTime = Time.time;
+        //AddReward(-0.01f * eltime);
 
-
+        //puntuacion negativa por alejarse del centro
         float xabs = Mathf.Abs(x);
-        AddReward(0.02f*(1.0f/(xabs+1.0f)-1.0f));
+        AddReward(0.07f*(5.0f/(5*xabs+1.0f)-1.0f));
 
         foreach (Rigidbody2D rB in spheresInScene)
         {
             if (checkColision(rB,0.25f)){
-                AddReward(-0.05f);
+                AddReward(-0.03f);
             }
         }
 
         if (ballsDestroyed > 0)
         {
-            AddReward(0.5f * ballsDestroyed);
+            AddReward(.5f * ballsDestroyed);
             ballsDestroyed = 0;
         }
 
         if (totalBallsDestroyed >= 1 && spherePool.NoneActivated())
         {
-            SetReward(2f);
+            AddReward(20f);
             EndEpisode();
         }
 
         if (dead)
         {
-            SetReward(-1f);
+            AddReward(-2.5f);
             EndEpisode();
         }
     }
