@@ -171,4 +171,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2be57c1b744a844bb325144c17c2d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  growRate: 1
+  pool: {fileID: 0}
+  growRate: 10

@@ -387,7 +387,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1023201101064609077}
   m_Layer: 0
-  m_Name: CarlosTrain
+  m_Name: Scenario
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

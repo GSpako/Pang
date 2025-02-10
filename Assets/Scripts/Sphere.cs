@@ -7,8 +7,6 @@ public class Sphere : MonoBehaviour
     public GameObject ballPrefab; // Not strictly needed if all sphere creation goes through SpherePool
 
     [HideInInspector] public HookPool hookPool;
-    private PakoAgent pakoAgent;
-    private CarlosAgent carlosAgent;
     private GameStateManager gameManager;
     private Rigidbody2D rb;
     private SpherePool pool;
@@ -16,15 +14,6 @@ public class Sphere : MonoBehaviour
     // Initialize references on enable or start
     void OnEnable()
     {
-        // Because we are pooling, OnEnable might be called multiple times
-        if (pakoAgent == null)
-            try{
-                pakoAgent = transform.parent.GetComponentInChildren<PakoAgent>();
-            }catch(Exception e){}
-        if(carlosAgent == null)
-            try{
-                carlosAgent = transform.parent.GetComponentInChildren<CarlosAgent>();
-            }catch(Exception e){}
 
         if (gameManager == null)
             gameManager = transform.parent.GetComponentInChildren<GameStateManager>();
@@ -39,15 +28,6 @@ public class Sphere : MonoBehaviour
         if(rb.velocity.magnitude <= 0)
             rb.velocity = vel;
 
-        // Inform PakoAgent of a newly "spawned" sphere
-        if (pakoAgent != null)
-        {
-            pakoAgent.AddSphere(rb);
-        }
-        if (carlosAgent != null)
-        {
-            carlosAgent.AddSphere(rb);
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -65,14 +45,6 @@ public class Sphere : MonoBehaviour
             hookPool.ReturnHook(other.gameObject);
             DestroyBall();
             gameManager?.DestroyedSoundEffect();
-        }
-        else if (other.TryGetComponent<PakoAgent>(out PakoAgent agent))
-        {
-            agent.dead = true;
-        }
-        else if (other.TryGetComponent<CarlosAgent>(out CarlosAgent agent2))
-        {
-            agent2.dead = true;
         }
     }
 
@@ -122,10 +94,6 @@ public class Sphere : MonoBehaviour
 
     private void ReturnToPool()
     {
-        if(pakoAgent != null) 
-            pakoAgent.RemoveSphere(rb);
-        if(carlosAgent != null) 
-            carlosAgent.RemoveSphere(rb);
 
         pool.ReturnSphere(gameObject);
     }

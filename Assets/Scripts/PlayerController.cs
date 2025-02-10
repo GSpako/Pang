@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     public float speed = 1f;
     public GameObject hook;
+    public HookPool hookpool;
 
     // Start is called before the first frame update
     void Start()
@@ -39,15 +40,18 @@ public class PlayerController : MonoBehaviour
     public float shootingColdown = .2f;
     float lastShot;
 
+
     private void Shooting()
     {
 
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space))
         { 
             if(Time.time > lastShot + shootingColdown)
-            {
-                lastShot = Time.time; 
-                Instantiate(hook, transform.position - new Vector3(0,0.08f,0), Quaternion.identity);
+            {   
+                GameObject h = hookpool.GetHook();
+                lastShot = Time.time;
+                if(h != null)
+                    h.transform.position =  transform.position - new Vector3(0,0.08f,0);
             }
         }
     }
