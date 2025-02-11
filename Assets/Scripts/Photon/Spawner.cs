@@ -15,16 +15,6 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
 
     public struct NetworkInputData: INetworkInput{public Vector2 direction;}
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) {
         if (runner.IsServer) {
