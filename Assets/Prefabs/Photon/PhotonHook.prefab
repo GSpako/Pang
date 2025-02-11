@@ -71,6 +71,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 3023037035986791278}
+  - {fileID: 8063711967879082758}
   ForceRemoteRenderTimeframe: 0
 --- !u!61 &4012276203233687218
 BoxCollider2D:
