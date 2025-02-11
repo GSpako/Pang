@@ -9,7 +9,12 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     private NetworkRunner _runner; 
 
+    [SerializeField] private NetworkPrefabRef _playerPrefab;
 
+    private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+
+
+    public struct NetworkInputData: INetworkInput{public Vector2 direction;}
     void Start()
     {
         
@@ -21,9 +26,29 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         
     }
 
-    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) {}
-    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) {}
-    public void OnInput(NetworkRunner runner, NetworkInput input) { }
+    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) {
+        if (runner.IsServer) {
+            // Create a unique position for the player (player.RawEncoded % runner.Config.Simulation.PlayerCount)
+            Vector3 spawnPosition = new Vector3(0 , 0, 0);
+            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
+            // Keep track of the player avatars for easy access
+            _spawnedCharacters.Add(player, networkPlayerObject);
+        }
+    }
+    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) {
+        if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject)) {
+            runner.Despawn(networkObject);
+            _spawnedCharacters.Remove(player);
+        }
+    }
+    public void OnInput(NetworkRunner runner, NetworkInput input) { 
+        NetworkInputData data = new NetworkInputData();
+        if(Input.GetKey(KeyCode.W)|| Input.GetKey(KeyCode.Space)) data.direction+= new Vector2(0,1);
+        if(Input.GetKey(KeyCode.A)) data.direction+= new Vector2(-1,0);
+        if(Input.GetKey(KeyCode.D)) data.direction+= new Vector2(1,0);
+
+        input.Set(data);
+    }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
     public void OnConnectedToServer(NetworkRunner runner) { }
