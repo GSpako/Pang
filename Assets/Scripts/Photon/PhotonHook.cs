@@ -14,7 +14,7 @@ public class PhotonHook : NetworkBehaviour {
         if (vida.Expired(Runner))
             Runner.Despawn(Object);
         else
-            transform.position += 5.0f * Runner.DeltaTime * transform.forward;
+            transform.position += 2.0f * Runner.DeltaTime * new Vector3(0,0.5f,0);
     }
 
 }
