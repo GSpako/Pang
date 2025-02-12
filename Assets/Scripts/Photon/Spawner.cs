@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Fusion;
+using Fusion.Addons.Physics;
 using Fusion.Sockets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -68,6 +69,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     // Create the Fusion runner and let it know that we will be providing user input
         _runner = gameObject.AddComponent<NetworkRunner>();
         _runner.ProvideInput = true;
+        gameObject.AddComponent<RunnerSimulatePhysics2D>().ClientPhysicsSimulation = ClientPhysicsSimulation.SimulateForward;
         // Create the NetworkSceneInfo from the current scene
         SceneRef scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
         NetworkSceneInfo sceneInfo = new NetworkSceneInfo();
