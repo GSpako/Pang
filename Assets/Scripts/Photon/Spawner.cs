@@ -41,8 +41,9 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) {
         if (runner.IsServer) {
             // Create a unique position for the player (player.RawEncoded % runner.Config.Simulation.PlayerCount)
-            Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount)* 3, 0, 0);
-            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
+            Vector3 spawnPosition = new Vector3(((player.RawEncoded % runner.Config.Simulation.PlayerCount)-1)* 3, 0, 0);
+            //EL instanciar la escena ya spawnea un player
+            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition - new Vector3(0,0.5f,0), Quaternion.identity, player);
             NetworkObject networkScenario = runner.Spawn(referenceScenario, spawnPosition, Quaternion.identity, player);
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);

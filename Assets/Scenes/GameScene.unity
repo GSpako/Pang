@@ -228,6 +228,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PhotonBall
       objectReference: {fileID: 0}
+    - target: {fileID: 1470446106016750182, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2309564208943566900, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
       propertyPath: SortKey
       value: 426527296
@@ -458,7 +462,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7515866258918779887, guid: 99e0e29bf9938864fa2b3b3cdb0c80a1, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
