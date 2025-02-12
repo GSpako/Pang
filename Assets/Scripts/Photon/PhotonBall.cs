@@ -85,6 +85,8 @@ public class PhotonBall : NetworkBehaviour
         // Compute the new size level.
         int newSize = sizeLevel - 1;
 
+        splitOffset = transform.localScale.x * 3 / 4;
+
         // Calculate spawn positions for the two new balls (offset left and right).
         Vector3 pos1 = currentPos + Vector3.left * splitOffset;
         Vector3 pos2 = currentPos + Vector3.right * splitOffset;
@@ -111,8 +113,8 @@ public class PhotonBall : NetworkBehaviour
         NetworkRigidbody2D nr2 = ballObj2.GetComponent<NetworkRigidbody2D>();
 
         // Compute new velocities for the split balls.
-        Vector3 vel1 = new Vector3(-Mathf.Abs(currentVelocity.x), Mathf.Abs(currentVelocity.y), currentVelocity.z);
-        Vector3 vel2 = new Vector3(Mathf.Abs(currentVelocity.x), Mathf.Abs(currentVelocity.y), currentVelocity.z);
+        Vector3 vel1 = new Vector3(-Mathf.Abs(0.2f), Mathf.Abs(0.4f), currentVelocity.z);
+        Vector3 vel2 = new Vector3(Mathf.Abs(0.2f), Mathf.Abs(0.4f), currentVelocity.z);
 
         // Apply the new velocities.
         if (nr1 != null)

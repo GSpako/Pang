@@ -216,7 +216,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1001 &641850047
+--- !u!1001 &801129472
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -228,13 +228,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: PhotonBall
       objectReference: {fileID: 0}
-    - target: {fileID: 1470446106016750182, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2309564208943566900, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
       propertyPath: SortKey
-      value: 3223138893
+      value: 426527296
       objectReference: {fileID: 0}
     - target: {fileID: 3813764670945638066, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
       propertyPath: m_LocalPosition.x
@@ -275,14 +271,6 @@ PrefabInstance:
     - target: {fileID: 3813764670945638066, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7798917820779461803, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7798917820779461803, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -375,7 +363,7 @@ Transform:
   m_GameObject: {fileID: 857594818}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -2}
+  m_LocalPosition: {x: 0, y: 0.16, z: -2.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -466,11 +454,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7515866258918779887, guid: 99e0e29bf9938864fa2b3b3cdb0c80a1, type: 3}
       propertyPath: m_Name
-      value: CarlosTrain
+      value: Scenario
       objectReference: {fileID: 0}
     - target: {fileID: 7515866258918779887, guid: 99e0e29bf9938864fa2b3b3cdb0c80a1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -486,9 +474,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1530574433217372434, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
-      propertyPath: referenceScenario
+      propertyPath: BallPrefab
       value: 
-      objectReference: {fileID: 3175557946223278527, guid: 7270faa2efcdfc64d8bfbc0c4f8e07bc, type: 3}
+      objectReference: {fileID: 1470446106016750182, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
+    - target: {fileID: 1530574433217372434, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
+      propertyPath: BallPrefab.RawGuidValue.Array.data[0]
+      value: -6580589825365785727
+      objectReference: {fileID: 0}
+    - target: {fileID: 1530574433217372434, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
+      propertyPath: BallPrefab.RawGuidValue.Array.data[1]
+      value: -4743391700961807942
+      objectReference: {fileID: 0}
     - target: {fileID: 5458426708448730972, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
       propertyPath: m_Name
       value: Network Spawner
@@ -546,4 +542,4 @@ SceneRoots:
   - {fileID: 470328531}
   - {fileID: 1967918647}
   - {fileID: 5183218195498258102}
-  - {fileID: 641850047}
+  - {fileID: 801129472}

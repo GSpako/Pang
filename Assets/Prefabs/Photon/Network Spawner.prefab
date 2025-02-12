@@ -46,3 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerPrefab:
     RawGuidValue: 56187b5ea1727a7469edfef8cc0b90e6
+  referenceScenario: {fileID: 3175557946223278527, guid: 7270faa2efcdfc64d8bfbc0c4f8e07bc, type: 3}
+  BallPrefab: {fileID: 0}
