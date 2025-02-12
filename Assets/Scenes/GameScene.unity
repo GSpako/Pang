@@ -228,6 +228,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PhotonBall
       objectReference: {fileID: 0}
+    - target: {fileID: 1470446106016750182, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2309564208943566900, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
       propertyPath: SortKey
       value: 3223138893
@@ -371,7 +375,7 @@ Transform:
   m_GameObject: {fileID: 857594818}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.2, z: -2}
+  m_LocalPosition: {x: 0, y: 0, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -464,6 +468,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CarlosTrain
       objectReference: {fileID: 0}
+    - target: {fileID: 7515866258918779887, guid: 99e0e29bf9938864fa2b3b3cdb0c80a1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -477,6 +485,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1530574433217372434, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
+      propertyPath: referenceScenario
+      value: 
+      objectReference: {fileID: 3175557946223278527, guid: 7270faa2efcdfc64d8bfbc0c4f8e07bc, type: 3}
     - target: {fileID: 5458426708448730972, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
       propertyPath: m_Name
       value: Network Spawner
