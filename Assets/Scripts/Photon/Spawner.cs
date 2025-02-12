@@ -4,6 +4,7 @@ using Fusion;
 using Fusion.Sockets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 {
 
@@ -13,13 +14,33 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
+    public struct scenario {public GameObject main;
+                            public List<GameObject> extras;
+                            }
+
+    public scenario scenarios;
+
+    public GameObject referenceScenario;
 
     public struct NetworkInputData: INetworkInput{public Vector2 direction;}
+
+
+   /* void Start(){
+        scenarios.main = referenceScenario.transform.GetChild(0).gameObject;
+        RectTransform rt = scenarios.main.GetComponent (typeof (RectTransform)) as RectTransform;
+        rt.sizeDelta = new Vector2 (Screen.width/2, Screen.height/2);
+        scenarios.extras = new List<GameObject>();
+    }
+
+    void Update(){
+        RectTransform rt = scenarios.main.GetComponent (typeof (RectTransform)) as RectTransform;
+        rt.sizeDelta = new Vector2 (Screen.width/2, Screen.height/2);
+    }*/
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) {
         if (runner.IsServer) {
             // Create a unique position for the player (player.RawEncoded % runner.Config.Simulation.PlayerCount)
-            Vector3 spawnPosition = new Vector3(0 , 0, 0);
+            Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount)* 3, 0, 0);
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
@@ -91,6 +112,14 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
             if (GUI.Button(new Rect(0, 40, 200, 40), "Join"))
                 StartGame(GameMode.Client);
         }
+    }
+
+    private void initImage(){
+        GameObject gb = new GameObject("");
+        gb.transform.parent = referenceScenario.transform.GetChild(1);
+        gb.AddComponent<RectTransform>();
+        gb.AddComponent<CanvasRenderer>();
+        gb.AddComponent<RawImage>();
     }
 
 }
