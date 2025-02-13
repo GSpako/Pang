@@ -10,11 +10,24 @@ public class LocalSceneManager : NetworkBehaviour
     public int spheresLeft = 8;
     public NetworkObject player = null;
 
+    [SerializeField]
+    public NetworkPrefabRef ballPrefab;
+
     public enum LocalSceneState
     {
         Dead,
         InProgress,
         Victory,
+    }
+
+    public void SpawnBall(){
+        if(state == LocalSceneState.Dead){return;}
+
+        if(ballPrefab != null){
+            Runner.Spawn(ballPrefab, this.transform.position + new Vector3(0,0.6f,0), Quaternion.identity);
+            spheresLeft += 8;
+            state = LocalSceneState.InProgress;
+        }
     }
 
     public void BallDestroyed()

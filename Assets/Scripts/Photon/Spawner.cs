@@ -25,6 +25,8 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public struct NetworkInputData: INetworkInput{public Vector2 direction;}
 
+    public string RoomName;
+
 
    /* void Start(){
         scenarios.main = referenceScenario.transform.GetChild(0).gameObject;
@@ -103,7 +105,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
             await _runner.StartGame(new StartGameArgs()
             {
                 GameMode = mode,
-                SessionName = "TestRoom",
+                SessionName = RoomName,
                 Scene = scene,
                 SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
             });
