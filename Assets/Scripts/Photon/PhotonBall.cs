@@ -101,13 +101,15 @@ public class PhotonBall : NetworkBehaviour
         NetworkObject ballObj1 = Runner.Spawn(ballPrefab, pos1, Quaternion.identity);
         NetworkObject ballObj2 = Runner.Spawn(ballPrefab, pos2, Quaternion.identity);
 
+        ballObj1.transform.SetParent(transform.parent, true);
+        ballObj2.transform.SetParent(transform.parent, true);
+
         // Get the PhotonBall components on the spawned objects.
         PhotonBall controller1 = ballObj1.GetComponent<PhotonBall>();
         PhotonBall controller2 = ballObj2.GetComponent<PhotonBall>();
 
         controller1.localSceneManager = this.localSceneManager;
         controller2.localSceneManager = this.localSceneManager;
-
 
         // Set the new size level.
         controller1.sizeLevel = newSize;

@@ -26,15 +26,18 @@ public class PhotonPlayer : NetworkBehaviour {
             if (HasStateAuthority && delay.ExpiredOrNotRunning(Runner)) {
                 if (data.direction.y>0) {
                     delay = TickTimer.CreateFromSeconds(Runner, 0.5f);
-                    Runner.Spawn(_prefabHook,
-                    transform.position - new Vector3(0,0.08f,0), Quaternion.identity,
+                    Runner.Spawn(_prefabHook, Vector3.zero
+                    , Quaternion.identity,
                     Object.InputAuthority, (runner, o) => {
-                    // Initialize the Ball before synchronizing it
-                    o.GetComponent<PhotonHook>().InitVida();
-                });
-            }
+                        // Initialize the Ball before synchronizing it
+                        o.transform.SetParent(gameObject.transform.parent, false);
+                        o.transform.localPosition = transform.localPosition - new Vector3(0, 0.08f, 0);
+                        });
+                    
+                }
             }
         }
+
         Vector2 pos = transform.localPosition;
         gameObject.transform.localPosition = new Vector2(Mathf.Clamp(pos.x, -1.53f, 1.53f), -0.8f);
 

@@ -7,14 +7,28 @@ using UnityEngine.Networking;
 public class PhotonHook : NetworkBehaviour {
 
     [Networked] private TickTimer vida { get; set; }
-    public void InitVida() {
-        vida = TickTimer.CreateFromSeconds(Runner, 5.0f);
+    SpriteRenderer spriteRenderer;
+
+    public float growRate = 1f;
+    public float height = 2.8f;
+
+
+    public override void Spawned()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
+
     public override void FixedUpdateNetwork() {
-        if (vida.Expired(Runner))
+
+        if (height > 35f)// limit growth of the hook, this way it doest go outside the map
+        {
             Runner.Despawn(Object);
+        }
         else
-            transform.position += 2.0f * Runner.DeltaTime * new Vector3(0,0.5f,0);
+        {
+            height += growRate * Runner.DeltaTime;
+            spriteRenderer.size = new Vector2(spriteRenderer.size.x, height);// height;
+        }
     }
 
 }
