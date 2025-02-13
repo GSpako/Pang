@@ -20,6 +20,13 @@ public class GlobalSceneManager : NetworkBehaviour
         }
     }
 
+    public void AddScene(LocalSceneManager l){
+        scenes.Add(l);
+    }
+
+    public void RemoveScene(LocalSceneManager l){
+        scenes.Remove(l);
+    }
 
 
 

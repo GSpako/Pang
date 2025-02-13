@@ -389,6 +389,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1470446106016750182, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
     - target: {fileID: 1530574433217372434, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
+      propertyPath: globalManager
+      value: 
+      objectReference: {fileID: 1286567355}
+    - target: {fileID: 1530574433217372434, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
       propertyPath: BallPrefab.RawGuidValue.Array.data[0]
       value: -6580589825365785727
       objectReference: {fileID: 0}

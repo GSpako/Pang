@@ -25,6 +25,8 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public struct NetworkInputData: INetworkInput{public Vector2 direction;}
 
+    public GlobalSceneManager globalManager;
+
     public string RoomName;
 
 
@@ -50,6 +52,8 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
             networkScenario.gameObject.GetComponent<LocalSceneManager>().player = networkPlayerObject;
             networkPlayerObject.transform.SetParent(networkScenario.transform,true);
 
+
+            globalManager.AddScene(networkPlayerObject.gameObject.GetComponentInParent<LocalSceneManager>());
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
         }
