@@ -46,6 +46,8 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition - new Vector3(0,0.5f,0), Quaternion.identity, player);
             NetworkObject networkScenario = runner.Spawn(referenceScenario, spawnPosition, Quaternion.identity, player);
             networkScenario.gameObject.GetComponent<LocalSceneManager>().player = networkPlayerObject;
+            networkPlayerObject.transform.SetParent(networkScenario.transform,true);
+
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
         }

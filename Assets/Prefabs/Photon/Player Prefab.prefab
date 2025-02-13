@@ -328,7 +328,7 @@ MonoBehaviour:
   acceleration: 10
   braking: 10
   maxSpeed: 2
-  rotationSpeed: 15
+  rotationSpeed: 0
 --- !u!114 &2671646334839999212
 MonoBehaviour:
   m_ObjectHideFlags: 0

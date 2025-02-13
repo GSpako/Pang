@@ -15,6 +15,7 @@ public class PhotonPlayer : NetworkBehaviour {
         GameObject _player = transform.GetChild(0).gameObject;
         _player.GetComponent<Renderer>().material.color = new Color(Random.value, Random.value, Random.value);
         _cc = GetComponent<NetworkCharacterController>();
+
     }
     public override void FixedUpdateNetwork() {
 
@@ -34,7 +35,8 @@ public class PhotonPlayer : NetworkBehaviour {
             }
             }
         }
-
+        Vector2 pos = transform.localPosition;
+        gameObject.transform.localPosition = new Vector2(Mathf.Clamp(pos.x, -1.53f, 1.53f), -0.8f);
 
     }
 }
