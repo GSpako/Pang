@@ -29,6 +29,7 @@ public class PhotonBall : NetworkBehaviour
 
     // Cached reference to the NetworkRigidbody2D component (from the Fusion Physics Addon).
     private NetworkRigidbody2D networkRigidbody2D;
+    private LocalSceneManager localSceneManager;
 
     public override void Spawned()
     {
@@ -36,6 +37,7 @@ public class PhotonBall : NetworkBehaviour
         networkRigidbody2D = GetComponent<NetworkRigidbody2D>();
 
         networkRigidbody2D.Rigidbody.velocity = new Vector2(0.2f, 0);
+        localSceneManager = gameObject.GetComponentInParent<LocalSceneManager>();
 
         if (networkRigidbody2D == null)
         {
@@ -61,17 +63,19 @@ public class PhotonBall : NetworkBehaviour
 
             if(sizeLevel == 0)
             {
+                localSceneManager.BallDestroyed();
                 Runner.Despawn(Object);
             }
             else 
             {
                 SplitBall();
-            
             }
         }
-        else if (collision.gameObject.CompareTag("Player"))
+        else if (collision.gameObject.GetComponent<PhotonPlayer>() != null)
         {
-            Debug.Log("Ball collided with a player!");
+            NetworkObject networkObject = collision.gameObject.GetComponent<NetworkObject>();
+            localSceneManager.Death();
+            Runner.Despawn(Object);
         }
     }
 
