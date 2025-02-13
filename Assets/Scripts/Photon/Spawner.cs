@@ -45,11 +45,10 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
             // Create a unique position for the player (player.RawEncoded % runner.Config.Simulation.PlayerCount)
             Vector3 spawnPosition = new Vector3(((player.RawEncoded % runner.Config.Simulation.PlayerCount)-1)* 3, 0, 0);
             //EL instanciar la escena ya spawnea un player
-            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition - new Vector3(0,0.5f,0), Quaternion.identity, player);
             NetworkObject networkScenario = runner.Spawn(referenceScenario, spawnPosition, Quaternion.identity, player);
+            NetworkObject networkPlayerObject = networkScenario.GetComponentInChildren<PhotonPlayer>().gameObject.GetComponent<NetworkObject>();
             networkScenario.gameObject.GetComponent<LocalSceneManager>().player = networkPlayerObject;
-            networkPlayerObject.transform.SetParent(networkScenario.transform,true);
-
+            
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
         }

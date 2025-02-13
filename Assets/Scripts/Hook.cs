@@ -10,7 +10,7 @@ public class Hook : MonoBehaviour
 
     public float growRate = 1f;
 
-    float height = 0f;
+    public float height = 0f;
     Vector3 correctScale = Vector3.zero;
 
     private void OnEnable()
