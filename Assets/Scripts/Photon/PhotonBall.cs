@@ -36,7 +36,7 @@ public class PhotonBall : NetworkBehaviour
         // Cache the NetworkRigidbody2D when the object spawns.
         networkRigidbody2D = GetComponent<NetworkRigidbody2D>();
 
-        networkRigidbody2D.Rigidbody.velocity = new Vector2(0.2f, 0);
+        networkRigidbody2D.Rigidbody.velocity = new Vector2(0.2f, .5f);
         localSceneManager = gameObject.GetComponentInParent<LocalSceneManager>();
 
         if (networkRigidbody2D == null)
@@ -50,10 +50,11 @@ public class PhotonBall : NetworkBehaviour
     {
         if (!Object.HasStateAuthority) return; // Only the state authority should handle collisions.
 
-        Debug.Log($"Collision detected with: {collision.gameObject.name}");
 
         if (collision.gameObject.GetComponent<PhotonHook>() != null)
         {
+            Debug.Log($"Collision detected with Hook");
+
             NetworkObject networkObject = collision.gameObject.GetComponent<NetworkObject>();
 
             if (networkObject != null)
@@ -71,11 +72,11 @@ public class PhotonBall : NetworkBehaviour
                 SplitBall();
             }
         }
-        else if (collision.gameObject.GetComponent<PhotonPlayer>() != null)
+        else if (collision.gameObject.GetComponentInParent<PhotonPlayer>() != null)
         {
-            NetworkObject networkObject = collision.gameObject.GetComponent<NetworkObject>();
+            Debug.Log($"Collision detected with Player");
+
             localSceneManager.Death();
-            Runner.Despawn(Object);
         }
     }
 

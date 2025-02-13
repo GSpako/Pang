@@ -168,6 +168,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1459112973570788463}
   - component: {fileID: 7972448920087370535}
+  - component: {fileID: 7399037045569303815}
   m_Layer: 0
   m_Name: Scenario
   m_TagString: Untagged
@@ -214,8 +215,24 @@ MonoBehaviour:
   NestedObjects:
   - {fileID: 4411954743227164832}
   - {fileID: 5047188477738852263}
-  NetworkedBehaviours: []
+  NetworkedBehaviours:
+  - {fileID: 7399037045569303815}
   ForceRemoteRenderTimeframe: 0
+--- !u!114 &7399037045569303815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3175557946223278527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54c46b64a05b6c94da639ec73ac65278, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 1
+  spheresLeft: 8
+  player: {fileID: 0}
 --- !u!1 &4647056046424997211
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,7 +250,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6816483112874331308
 Transform:
   m_ObjectHideFlags: 0
@@ -1082,11 +1099,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3813764670945638066, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.77
       objectReference: {fileID: 0}
     - target: {fileID: 3813764670945638066, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0.78
       objectReference: {fileID: 0}
     - target: {fileID: 3813764670945638066, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
       propertyPath: m_LocalPosition.z
