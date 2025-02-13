@@ -318,7 +318,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1530574433217372434, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
       propertyPath: RoomName
-      value: ChapaRoom
+      value: ChipiRoom
       objectReference: {fileID: 0}
     - target: {fileID: 1530574433217372434, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
       propertyPath: BallPrefab

@@ -22,7 +22,7 @@ public class LocalSceneManager : NetworkBehaviour
 
     public void SpawnBall(){
         if(state == LocalSceneState.Dead){return;}
-
+        if(Runner.GameMode != GameMode.Host){return;}
         if(ballPrefab != null){
             Runner.Spawn(ballPrefab, this.transform.position + new Vector3(0,0.6f,0), Quaternion.identity);
             spheresLeft += 8;

@@ -43,6 +43,9 @@ public class GlobalSceneManager : NetworkBehaviour
     public void StartManager(){
         playingScenes = scenes.Count;
         activeScenes = scenes;
+        foreach (LocalSceneManager l in activeScenes){
+            l.SpawnBall();
+        }
     }
 
     public void SceneLost(LocalSceneManager l){
@@ -58,6 +61,20 @@ public class GlobalSceneManager : NetworkBehaviour
         started = false;
         Debug.Log("Acabouse");
         //Decir quien gana y toda la pesca
+    }
+
+
+    private void OnGUI()
+    {
+        if (Runner.GameMode == GameMode.Host) {
+            if (GUI.Button(new Rect(0, 0, 200, 40), "Start")){
+                Debug.Log("HOLIIII");
+                if(started == false){
+                    started = true;
+                    StartManager();
+                }
+            }
+        }
     }
 
 }

@@ -278,6 +278,8 @@ MonoBehaviour:
   state: 1
   spheresLeft: 8
   player: {fileID: 0}
+  ballPrefab:
+    RawGuidValue: 81c385566b0cada4bab1a22961162cbe
 --- !u!1 &4647056046424997211
 GameObject:
   m_ObjectHideFlags: 0

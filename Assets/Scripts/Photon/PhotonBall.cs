@@ -33,6 +33,7 @@ public class PhotonBall : NetworkBehaviour
 
     public override void Spawned()
     {
+        //this.transform.parent = 
         // Cache the NetworkRigidbody2D when the object spawns.
         networkRigidbody2D = GetComponent<NetworkRigidbody2D>();
 

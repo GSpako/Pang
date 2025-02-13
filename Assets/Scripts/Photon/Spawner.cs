@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Fusion;
 using Fusion.Addons.Physics;
@@ -27,7 +28,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public struct NetworkInputData: INetworkInput{public Vector2 direction;}
 
-    [HideInInspector]
+    //[HideInInspector]
     public GlobalSceneManager globalManager;
 
     public string RoomName;
@@ -61,6 +62,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
             _spawnedCharacters.Add(player, networkPlayerObject);
             _spawnedScenarios.Add(player, networkScenario);
         }
+        //globalManager = GameObject.FindGameObjectsWithTag("Finish")[0].GetComponent<GlobalSceneManager>();
     }
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) {
         if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject)) {
@@ -124,9 +126,12 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
                 Scene = scene,
                 SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
             });
+        if(_runner.GameMode == GameMode.Host){
+            NetworkObject gman = _runner.Spawn(_globalGameManagerPrefab);
+            globalManager = gman.GetComponent<GlobalSceneManager>();
+        }else{
 
-        NetworkObject gman = _runner.Spawn(_globalGameManagerPrefab);
-        globalManager = gman.GetComponent<GlobalSceneManager>();
+        }
     }
 
     private void OnGUI()
