@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PhotonBall : NetworkBehaviour
 {
-    // The current size level (e.g., 3 = largest; 0 = smallest—won't split further)
+    // The current size level (e.g., 3 = largest; 0 = smallestï¿½won't split further)
     [SerializeField]
     public int sizeLevel = 3;
 
@@ -42,6 +42,10 @@ public class PhotonBall : NetworkBehaviour
         if (networkRigidbody2D == null)
         {
             Debug.LogWarning("NetworkRigidbody2D is not assigned on this prefab.", this);
+        }
+        if (localSceneManager == null)
+        {
+            Debug.LogWarning("localSceneManager is not assigned on this prefab.", this);
         }
     }
     
@@ -96,13 +100,17 @@ public class PhotonBall : NetworkBehaviour
         Vector3 pos1 = currentPos + Vector3.left * splitOffset;
         Vector3 pos2 = currentPos + Vector3.right * splitOffset;
 
-        // Spawn the two new balls using Fusion’s Runner.Spawn.
+        // Spawn the two new balls using Fusionï¿½s Runner.Spawn.
         NetworkObject ballObj1 = Runner.Spawn(ballPrefab, pos1, Quaternion.identity);
         NetworkObject ballObj2 = Runner.Spawn(ballPrefab, pos2, Quaternion.identity);
 
         // Get the PhotonBall components on the spawned objects.
         PhotonBall controller1 = ballObj1.GetComponent<PhotonBall>();
         PhotonBall controller2 = ballObj2.GetComponent<PhotonBall>();
+
+        controller1.localSceneManager = this.localSceneManager;
+        controller2.localSceneManager = this.localSceneManager;
+
 
         // Set the new size level.
         controller1.sizeLevel = newSize;
