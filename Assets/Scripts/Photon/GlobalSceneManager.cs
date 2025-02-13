@@ -12,11 +12,23 @@ public class GlobalSceneManager : NetworkBehaviour
 
     private List<LocalSceneManager> scenes = new List<LocalSceneManager>();
 
+    private List<LocalSceneManager> activeScenes = new List<LocalSceneManager>();
+
+    private int playingScenes;
+
     bool started{get;set;}
 
     void Awake(){
         if (Instance == null){
             Instance = this;
+        }
+
+    }
+
+    public override void Spawned(){
+        Debug.Log("Spawned");
+        if (Runner.GameMode == GameMode.Host){
+            Debug.Log("Hello");
         }
     }
 
@@ -28,7 +40,24 @@ public class GlobalSceneManager : NetworkBehaviour
         scenes.Remove(l);
     }
 
+    public void StartManager(){
+        playingScenes = scenes.Count;
+        activeScenes = scenes;
+    }
 
+    public void SceneLost(LocalSceneManager l){
 
+        activeScenes.Remove(l);
+        playingScenes--;
+        if(playingScenes <= 0){
+            EndGame();
+        }
+    }
+
+    private void EndGame(){
+        started = false;
+        Debug.Log("Acabouse");
+        //Decir quien gana y toda la pesca
+    }
 
 }

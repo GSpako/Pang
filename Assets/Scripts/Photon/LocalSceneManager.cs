@@ -43,6 +43,9 @@ public class LocalSceneManager : NetworkBehaviour
     public void Death()
     {
         state = LocalSceneState.Dead;
+        GlobalSceneManager.Instance.SceneLost(this);
+        //Creo que no hay que despawnear players tema conectarse y desconectarse
+        // y temas de reiniciar partida
         Runner.Despawn(player);
     }
 }

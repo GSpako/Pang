@@ -12,8 +12,10 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     private NetworkRunner _runner; 
 
     [SerializeField] private NetworkPrefabRef _playerPrefab;
+    [SerializeField] private NetworkPrefabRef _globalGameManagerPrefab;
 
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    private Dictionary<PlayerRef, NetworkObject> _spawnedScenarios = new Dictionary<PlayerRef, NetworkObject>();
 
     public struct scenario {public GameObject main;
                             public List<GameObject> extras;
@@ -25,6 +27,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public struct NetworkInputData: INetworkInput{public Vector2 direction;}
 
+    [HideInInspector]
     public GlobalSceneManager globalManager;
 
     public string RoomName;
@@ -56,12 +59,18 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
             globalManager.AddScene(networkPlayerObject.gameObject.GetComponentInParent<LocalSceneManager>());
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
+            _spawnedScenarios.Add(player, networkScenario);
         }
     }
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) {
         if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject)) {
             runner.Despawn(networkObject);
             _spawnedCharacters.Remove(player);
+        }
+        //borrar tmb el escenario cuando se desconecte el jugador
+        if (_spawnedScenarios.TryGetValue(player, out NetworkObject networkScene)) {
+            runner.Despawn(networkScene);
+            _spawnedScenarios.Remove(player);
         }
     }
     public void OnInput(NetworkRunner runner, NetworkInput input) { 
@@ -115,6 +124,9 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
                 Scene = scene,
                 SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
             });
+
+        NetworkObject gman = _runner.Spawn(_globalGameManagerPrefab);
+        globalManager = gman.GetComponent<GlobalSceneManager>();
     }
 
     private void OnGUI()

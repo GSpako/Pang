@@ -43,10 +43,6 @@ public class PhotonBall : NetworkBehaviour
         {
             Debug.LogWarning("NetworkRigidbody2D is not assigned on this prefab.", this);
         }
-        if (localSceneManager == null)
-        {
-            Debug.LogWarning("localSceneManager is not assigned on this prefab.", this);
-        }
     }
     
     /// **NEW: Proper Collision Detection in Fusion**

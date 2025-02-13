@@ -308,70 +308,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1286567353
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1286567356}
-  - component: {fileID: 1286567355}
-  - component: {fileID: 1286567354}
-  m_Layer: 0
-  m_Name: GlobalGameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1286567354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1286567353}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SortKey: 2983046940
-  ObjectInterest: 1
-  Flags: 262145
-  NestedObjects: []
-  NetworkedBehaviours:
-  - {fileID: 1286567355}
-  ForceRemoteRenderTimeframe: 0
---- !u!114 &1286567355
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1286567353}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04addafd028d4a7459607ee5985143e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1286567356
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1286567353}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.726383, y: 0.3391042, z: -1.5284369}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5183218195498258102
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -382,7 +318,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1530574433217372434, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
       propertyPath: RoomName
-      value: ChipiRoom
+      value: ChapaRoom
       objectReference: {fileID: 0}
     - target: {fileID: 1530574433217372434, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
       propertyPath: BallPrefab
@@ -391,7 +327,7 @@ PrefabInstance:
     - target: {fileID: 1530574433217372434, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
       propertyPath: globalManager
       value: 
-      objectReference: {fileID: 1286567355}
+      objectReference: {fileID: 0}
     - target: {fileID: 1530574433217372434, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
       propertyPath: BallPrefab.RawGuidValue.Array.data[0]
       value: -6580589825365785727
@@ -399,6 +335,14 @@ PrefabInstance:
     - target: {fileID: 1530574433217372434, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
       propertyPath: BallPrefab.RawGuidValue.Array.data[1]
       value: -4743391700961807942
+      objectReference: {fileID: 0}
+    - target: {fileID: 1530574433217372434, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
+      propertyPath: _globalGameManagerPrefab.RawGuidValue.Array.data[0]
+      value: -833262471769807276
+      objectReference: {fileID: 0}
+    - target: {fileID: 1530574433217372434, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
+      propertyPath: _globalGameManagerPrefab.RawGuidValue.Array.data[1]
+      value: -260218324247122312
       objectReference: {fileID: 0}
     - target: {fileID: 5458426708448730972, guid: 815561cbcd3ff29489decb4d1a87077c, type: 3}
       propertyPath: m_Name
@@ -456,4 +400,3 @@ SceneRoots:
   - {fileID: 857594821}
   - {fileID: 470328531}
   - {fileID: 5183218195498258102}
-  - {fileID: 1286567356}
