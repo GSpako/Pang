@@ -26,10 +26,7 @@ public class PhotonPlayer : NetworkBehaviour {
         if (GetInput(out Spawner.NetworkInputData data)) {
             Vector2 moveAmount = 5 * new Vector2(data.direction.x,0) * Runner.DeltaTime;
             _cc.Move(moveAmount);
-            //deltapos += moveAmount;
-            //COMO COÑO LLO CLAMPEO PARA QUE SE QUEDE EN SU ESPACI
-            //gameObject.transform.position = new Vector2(Mathf.Clamp(transform.position.x,startpos.x-1.53f, startpos.x+1.53f),0f);
-            //gameObject.transform.position = startpos + deltapos;
+            gameObject.transform.localPosition = new Vector2(Mathf.Clamp(transform.localPosition.x, -1.53f, 1.53f), -0.8f);
             if (data.direction.sqrMagnitude > 0) _forward = data.direction;
 
             if (HasStateAuthority && delay.ExpiredOrNotRunning(Runner)) {
@@ -38,13 +35,13 @@ public class PhotonPlayer : NetworkBehaviour {
                     Runner.Spawn(_prefabHook, Vector3.zero
                     , Quaternion.identity,
                     Object.InputAuthority, (runner, o) => {
-                        // Initialize the Ball before synchronizing it
                         o.transform.SetParent(gameObject.transform.parent, false);
                         o.transform.localPosition = transform.localPosition - new Vector3(0, 0.08f, 0);
-                        });
+                    });
                     
                 }
             }
         }
+        
     }
 }

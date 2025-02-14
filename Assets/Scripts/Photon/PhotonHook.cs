@@ -10,12 +10,13 @@ public class PhotonHook : NetworkBehaviour {
     SpriteRenderer spriteRenderer;
 
     public float growRate = 1f;
-    public float height = 2.8f;
+    [Networked] private float height { get; set; }
 
 
     public override void Spawned()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        height = 2.8f;
     }
 
     public override void FixedUpdateNetwork() {
