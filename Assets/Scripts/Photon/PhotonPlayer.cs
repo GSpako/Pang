@@ -25,7 +25,7 @@ public class PhotonPlayer : NetworkBehaviour {
 
         if (GetInput(out Spawner.NetworkInputData data)) {
             Vector2 moveAmount = 5 * new Vector2(data.direction.x,0) * Runner.DeltaTime;
-            _cc.Move(moveAmount/2f);
+            _cc.Move(moveAmount);
             //deltapos += moveAmount;
             //COMO COÑO LLO CLAMPEO PARA QUE SE QUEDE EN SU ESPACI
             //gameObject.transform.position = new Vector2(Mathf.Clamp(transform.position.x,startpos.x-1.53f, startpos.x+1.53f),0f);
@@ -46,9 +46,5 @@ public class PhotonPlayer : NetworkBehaviour {
                 }
             }
         }
-
-        //Vector2 pos = transform.localPosition;
-        //gameObject.transform.localPosition = new Vector2(Mathf.Clamp(pos.x, -1.53f, 1.53f), -0.8f);
-
     }
 }
