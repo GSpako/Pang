@@ -213,6 +213,7 @@ GameObject:
   - component: {fileID: 1459112973570788463}
   - component: {fileID: 7972448920087370535}
   - component: {fileID: 7399037045569303815}
+  - component: {fileID: 6174960519867983305}
   m_Layer: 0
   m_Name: Scenario
   m_TagString: Untagged
@@ -264,6 +265,7 @@ MonoBehaviour:
   - {fileID: 1907851244876520267}
   NetworkedBehaviours:
   - {fileID: 7399037045569303815}
+  - {fileID: 6174960519867983305}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &7399037045569303815
 MonoBehaviour:
@@ -281,7 +283,24 @@ MonoBehaviour:
   spheresLeft: 8
   player: {fileID: 0}
   ballPrefab:
-    RawGuidValue: 00000000000000000000000000000000
+    RawGuidValue: 81c385566b0cada4bab1a22961162cbe
+--- !u!114 &6174960519867983305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3175557946223278527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateAuthorityChangeErrorCorrectionDelta: 0.15
+  SyncScale: 0
+  SyncParent: 0
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0
 --- !u!1 &4647056046424997211
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,7 +567,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SortKey: 372174734
   ObjectInterest: 1
-  Flags: 1
+  Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 5611304210227652348}
@@ -1092,7 +1111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SortKey: 4174667265
   ObjectInterest: 1
-  Flags: 1
+  Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 9022548743406940955}
@@ -1200,6 +1219,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player Prefab
       objectReference: {fileID: 0}
+    - target: {fileID: 7928700472759299228, guid: 56187b5ea1727a7469edfef8cc0b90e6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1232,6 +1255,10 @@ PrefabInstance:
     - target: {fileID: 1470446106016750182, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
       propertyPath: m_Name
       value: PhotonBall
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470446106016750182, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2309564208943566900, guid: 81c385566b0cada4bab1a22961162cbe, type: 3}
       propertyPath: SortKey

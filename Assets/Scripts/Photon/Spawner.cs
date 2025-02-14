@@ -49,7 +49,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) {
         if (runner.IsServer) {
             // Create a unique position for the player (player.RawEncoded % runner.Config.Simulation.PlayerCount)
-            Vector3 spawnPosition = new Vector3(((player.RawEncoded % runner.Config.Simulation.PlayerCount)-1)* 3, 0, 0);
+            Vector3 spawnPosition = new Vector3(((player.RawEncoded % runner.Config.Simulation.PlayerCount)-2)* 3.5f, 0, 0);
             //EL instanciar la escena ya spawnea un player
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition - new Vector3(0,0.5f,0), Quaternion.identity, player);
             NetworkObject networkScenario = runner.Spawn(referenceScenario, spawnPosition, Quaternion.identity, player);
@@ -62,7 +62,17 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
             _spawnedCharacters.Add(player, networkPlayerObject);
             _spawnedScenarios.Add(player, networkScenario);
         }
-        //globalManager = GameObject.FindGameObjectsWithTag("Finish")[0].GetComponent<GlobalSceneManager>();
+        //a lo mejor ni hace falta, solo el add scene
+
+        if (runner.IsClient) {
+            if(_spawnedCharacters.TryGetValue(player,out NetworkObject n)){
+                if(_spawnedScenarios.TryGetValue(player,out NetworkObject s)){
+                    s.gameObject.GetComponent<LocalSceneManager>().player = n;
+                    //n.transform.SetParent(s.transform,true);
+                    globalManager.AddScene(n.gameObject.GetComponentInParent<LocalSceneManager>());             
+                }
+            }
+        }
     }
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) {
         if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject)) {

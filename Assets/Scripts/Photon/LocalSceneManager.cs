@@ -24,7 +24,8 @@ public class LocalSceneManager : NetworkBehaviour
         if(state == LocalSceneState.Dead){return;}
         if(Runner.GameMode != GameMode.Host){return;}
         if(ballPrefab != null){
-            Runner.Spawn(ballPrefab, this.transform.position + new Vector3(0,0.6f,0), Quaternion.identity);
+            NetworkObject n = Runner.Spawn(ballPrefab, this.transform.position + new Vector3(0,0.6f,0), Quaternion.identity);
+            n.GetComponent<PhotonBall>().localSceneManager = this;
             spheresLeft += 8;
             state = LocalSceneState.InProgress;
         }

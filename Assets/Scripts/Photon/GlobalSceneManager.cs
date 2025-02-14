@@ -10,7 +10,7 @@ public class GlobalSceneManager : NetworkBehaviour
 {
     public static GlobalSceneManager Instance { get; private set;}
 
-    private List<LocalSceneManager> scenes = new List<LocalSceneManager>();
+    public List<LocalSceneManager> scenes = new List<LocalSceneManager>();
 
     private List<LocalSceneManager> activeScenes = new List<LocalSceneManager>();
 
@@ -26,10 +26,6 @@ public class GlobalSceneManager : NetworkBehaviour
     }
 
     public override void Spawned(){
-        Debug.Log("Spawned");
-        if (Runner.GameMode == GameMode.Host){
-            Debug.Log("Hello");
-        }
     }
 
     public void AddScene(LocalSceneManager l){
@@ -59,7 +55,6 @@ public class GlobalSceneManager : NetworkBehaviour
 
     private void EndGame(){
         started = false;
-        Debug.Log("Acabouse");
         //Decir quien gana y toda la pesca
     }
 
@@ -68,8 +63,7 @@ public class GlobalSceneManager : NetworkBehaviour
     {
         if (Runner.GameMode == GameMode.Host) {
             if (GUI.Button(new Rect(0, 0, 200, 40), "Start")){
-                Debug.Log("HOLIIII");
-                if(started == false){
+                if(started == false || true){
                     started = true;
                     StartManager();
                 }

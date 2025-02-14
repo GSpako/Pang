@@ -29,7 +29,8 @@ public class PhotonBall : NetworkBehaviour
 
     // Cached reference to the NetworkRigidbody2D component (from the Fusion Physics Addon).
     private NetworkRigidbody2D networkRigidbody2D;
-    private LocalSceneManager localSceneManager;
+    [HideInInspector]
+    public LocalSceneManager localSceneManager;
 
     public override void Spawned()
     {
@@ -77,6 +78,7 @@ public class PhotonBall : NetworkBehaviour
         {
             Debug.Log($"Collision detected with Player");
 
+            //como indicar 
             localSceneManager.Death();
         }
     }
