@@ -29,6 +29,7 @@ public class PhotonBall : NetworkBehaviour
 
     // Cached reference to the NetworkRigidbody2D component (from the Fusion Physics Addon).
     private NetworkRigidbody2D networkRigidbody2D;
+    
     [HideInInspector]
     public LocalSceneManager localSceneManager;
 

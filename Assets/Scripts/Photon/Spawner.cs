@@ -63,14 +63,15 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
             _spawnedScenarios.Add(player, networkScenario);
         }
         //a lo mejor ni hace falta, solo el add scene
-
+        //En principio esto no hace nada
         if (runner.IsClient) {
             if(_spawnedCharacters.TryGetValue(player,out NetworkObject n)){
                 if(_spawnedScenarios.TryGetValue(player,out NetworkObject s)){
+                    Debug.Log("hello");
                     s.gameObject.GetComponent<LocalSceneManager>().player = n;
-                    //n.transform.SetParent(s.transform,true);
-                    globalManager.AddScene(n.gameObject.GetComponentInParent<LocalSceneManager>());             
+                    n.transform.SetParent(s.transform,true);       
                 }
+                n.transform.position = new Vector3(((player.RawEncoded % runner.Config.Simulation.PlayerCount)-2)* 3.5f, 0, 0);
             }
         }
     }

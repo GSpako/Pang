@@ -10,17 +10,26 @@ public class PhotonPlayer : NetworkBehaviour {
     private NetworkCharacterController _cc;
     private Vector3 _forward;
 
+    private Vector2 startpos;
+    private Vector2 deltapos;
     private TickTimer delay;
     private void Awake(){
         GameObject _player = transform.GetChild(0).gameObject;
         _player.GetComponent<Renderer>().material.color = new Color(Random.value, Random.value, Random.value);
         _cc = GetComponent<NetworkCharacterController>();
-
+        startpos = gameObject.transform.position;
+        startpos.y = -0.8f;
+        deltapos = new Vector2(0f,0f);
     }
     public override void FixedUpdateNetwork() {
 
         if (GetInput(out Spawner.NetworkInputData data)) {
-            _cc.Move(5 * new Vector2(data.direction.x,0) * Runner.DeltaTime);
+            Vector2 moveAmount = 5 * new Vector2(data.direction.x,0) * Runner.DeltaTime;
+            _cc.Move(moveAmount/2f);
+            //deltapos += moveAmount;
+            //COMO COÑO LLO CLAMPEO PARA QUE SE QUEDE EN SU ESPACI
+            //gameObject.transform.position = new Vector2(Mathf.Clamp(transform.position.x,startpos.x-1.53f, startpos.x+1.53f),0f);
+            //gameObject.transform.position = startpos + deltapos;
             if (data.direction.sqrMagnitude > 0) _forward = data.direction;
 
             if (HasStateAuthority && delay.ExpiredOrNotRunning(Runner)) {
@@ -38,8 +47,8 @@ public class PhotonPlayer : NetworkBehaviour {
             }
         }
 
-        Vector2 pos = transform.localPosition;
-        gameObject.transform.localPosition = new Vector2(Mathf.Clamp(pos.x, -1.53f, 1.53f), -0.8f);
+        //Vector2 pos = transform.localPosition;
+        //gameObject.transform.localPosition = new Vector2(Mathf.Clamp(pos.x, -1.53f, 1.53f), -0.8f);
 
     }
 }
