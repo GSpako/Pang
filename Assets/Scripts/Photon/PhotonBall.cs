@@ -79,6 +79,8 @@ public class PhotonBall : NetworkBehaviour
         {
             Debug.Log($"Collision detected with Player");
 
+            //Aqui avisar al globalManager de que ha perdido el jugador
+
             //como indicar 
             localSceneManager.Death();
         }
@@ -113,6 +115,8 @@ public class PhotonBall : NetworkBehaviour
 
         controller1.localSceneManager = this.localSceneManager;
         controller2.localSceneManager = this.localSceneManager;
+
+        //ahora habría que meter estas bolas en la lista de bolas del local y sacar la bola anterior
 
         // Set the new size level.
         controller1.sizeLevel = newSize;

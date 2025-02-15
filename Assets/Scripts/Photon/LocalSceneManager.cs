@@ -20,12 +20,26 @@ public class LocalSceneManager : NetworkBehaviour
         Victory,
     }
 
-    public void SpawnBall(){
+    public void SpawnBall(int localScaled=3){
         if(state == LocalSceneState.Dead){return;}
         if(Runner.GameMode != GameMode.Host){return;}
         if(ballPrefab != null){
+
+            //meter en una lista las bolas actuales, cuando se crea bola, esta va a la lista del local
             NetworkObject n = Runner.Spawn(ballPrefab, this.transform.position + new Vector3(0,0.6f,0), Quaternion.identity);
             n.GetComponent<PhotonBall>().localSceneManager = this;
+
+            //Reescalar la bola en funcion de tamaño
+            //HUUUUUH por que esto no va
+            /*
+            float newScaleFactor = 0.5f;
+            for(int i = 3-localScaled;i>0;i--){
+                newScaleFactor= newScaleFactor/2f;
+            }
+            n.GetComponent<PhotonBall>().sizeLevel = localScaled;
+            //no se esta escalando
+            n.transform.localScale = Vector3.one * newScaleFactor;
+            */
             spheresLeft += 8;
             state = LocalSceneState.InProgress;
         }
