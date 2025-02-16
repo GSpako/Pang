@@ -2,35 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
-using UnityEngine.Networking;
 
 public class PhotonHook : NetworkBehaviour {
 
-    [Networked] private TickTimer vida { get; set; }
-    SpriteRenderer spriteRenderer;
+    [Networked] private float height { get; set; }
+    private SpriteRenderer spriteRenderer;
 
     public float growRate = 1f;
-    [Networked] private float height { get; set; }
+    private bool isSpawned = false;
 
-
-    public override void Spawned()
-    {
+    public override void Spawned() {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        height = 2.8f;
+
+        // Initialize height only on the authoritative client
+        if (Object.HasStateAuthority) {
+            height = 2.8f;
+        }
+
+        isSpawned = true;
     }
 
     public override void FixedUpdateNetwork() {
+        if (!isSpawned) return;
 
-        if (height > 35f)// limit growth of the hook, this way it doest go outside the map
-        {
-            Runner.Despawn(Object);
-        }
-        else
-        {
-            height += growRate * Runner.DeltaTime;
-            spriteRenderer.size = new Vector2(spriteRenderer.size.x, height);// height;
+        // Only authoritative client should grow the hook
+        if (Object.HasStateAuthority) {
+            if (height > 35f) {
+                Runner.Despawn(Object);
+            } else {
+                height += growRate * Runner.DeltaTime;
+            }
         }
     }
 
-}
+    public override void Render()
+    {
+        if (!isSpawned) return;
 
+        // Update the sprite size using the interpolated networked height
+        spriteRenderer.size = new Vector2(spriteRenderer.size.x, height);
+    }
+
+}
