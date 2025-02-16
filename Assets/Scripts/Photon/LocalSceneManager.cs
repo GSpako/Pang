@@ -43,7 +43,7 @@ public class LocalSceneManager : NetworkBehaviour
             //no se esta escalando
             n.transform.localScale = Vector3.one * newScaleFactor;
             */
-            spheresLeft += 1;
+            spheresLeft += 8;
             state = LocalSceneState.InProgress;
 
             activeBalls.Add(n);
