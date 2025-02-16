@@ -25,6 +25,10 @@ public class LocalSceneManager : NetworkBehaviour
         Victory,
     }
 
+    public override void Spawned(){
+        Debug.Log(this.GetComponent<NetworkObject>().InputAuthority + " won");
+    }
+
     public void SpawnBall(int localScaled=3){
         if(state == LocalSceneState.Dead){return;}
         if(Runner.GameMode != GameMode.Host){return;}

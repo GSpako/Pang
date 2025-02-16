@@ -21,11 +21,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
     private Dictionary<PlayerRef, NetworkObject> _spawnedScenarios = new Dictionary<PlayerRef, NetworkObject>();
 
-    public struct scenario {public GameObject main;
-                            public List<GameObject> extras;
-                            }
 
-    public scenario scenarios;
 
     [SerializeField]
    private NetworkObject countdown;
@@ -170,12 +166,5 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    private void initImage(){
-        GameObject gb = new GameObject("");
-        gb.transform.parent = referenceScenario.transform.GetChild(1);
-        gb.AddComponent<RectTransform>();
-        gb.AddComponent<CanvasRenderer>();
-        gb.AddComponent<RawImage>();
-    }
 
 }

@@ -68,7 +68,7 @@ public class GlobalSceneManager : NetworkBehaviour
         activeScenes.Remove(l);
         playingScenes--;
         //en verdad deberia ser 1
-        if(playingScenes <= 0){
+        if(playingScenes <= 1){
             EndGame();
         }
     }
@@ -86,9 +86,14 @@ public class GlobalSceneManager : NetworkBehaviour
         }
     }
 
+
+    //FALTA ESTO Y YA
     private void EndGame(){
         started = false;
         //Decir quien gana y toda la pesca
+        try{
+        RPC_SetText(activeScenes[0].GetComponent<NetworkObject>().InputAuthority + " won");
+        }catch (Exception e){}
     }
 
 
@@ -96,8 +101,10 @@ public class GlobalSceneManager : NetworkBehaviour
     {
         if (Runner.GameMode == GameMode.Host) {
             if (GUI.Button(new Rect(0, 0, 200, 40), "Start")){
+                if(!started && scenes.Count > 1) {
                     started = true;
                     StartManager();
+                }
             }
         }
     }
