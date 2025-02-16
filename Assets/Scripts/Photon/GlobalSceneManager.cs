@@ -40,6 +40,8 @@ public class GlobalSceneManager : NetworkBehaviour
         playingScenes = scenes.Count;
         activeScenes = scenes;
         foreach (LocalSceneManager l in activeScenes){
+            l.DestroyAllBalls();
+            l.Reset();
             l.SpawnBall();
         }
     }
@@ -48,6 +50,7 @@ public class GlobalSceneManager : NetworkBehaviour
 
         activeScenes.Remove(l);
         playingScenes--;
+        //en verdad deberia ser 1
         if(playingScenes <= 0){
             EndGame();
         }

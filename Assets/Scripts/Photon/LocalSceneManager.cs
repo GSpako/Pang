@@ -13,6 +13,9 @@ public class LocalSceneManager : NetworkBehaviour
     [SerializeField]
     public NetworkPrefabRef ballPrefab;
 
+    
+    private List<NetworkObject> activeBalls = new List<NetworkObject>();
+
     public enum LocalSceneState
     {
         Dead,
@@ -42,6 +45,26 @@ public class LocalSceneManager : NetworkBehaviour
             */
             spheresLeft += 8;
             state = LocalSceneState.InProgress;
+
+            activeBalls.Add(n);
+        }
+    }
+
+    public void Reset(){
+        activeBalls = new List<NetworkObject>();
+        player.GetComponent<PhotonPlayer>().enabled = true;
+        spheresLeft = 0;
+    }
+
+
+    public void DestroyAllBalls(){
+        if(Runner.IsServer){
+            if(activeBalls.Count != 0){
+                foreach(NetworkObject ball in activeBalls){
+                    activeBalls.Remove(ball);
+                    Runner.Despawn(ball);
+                }
+            }
         }
     }
 
@@ -61,6 +84,7 @@ public class LocalSceneManager : NetworkBehaviour
         GlobalSceneManager.Instance.SceneLost(this);
         //Creo que no hay que despawnear players tema conectarse y desconectarse
         // y temas de reiniciar partida
-        Runner.Despawn(player);
+        //Runner.Despawn(player);
+        player.GetComponent<PhotonPlayer>().enabled = false;
     }
 }
