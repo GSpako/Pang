@@ -7,7 +7,7 @@ using UnityEngine;
 public class LocalSceneManager : NetworkBehaviour
 {
     public LocalSceneState state = LocalSceneState.InProgress;
-    public int spheresLeft = 8;
+    public int spheresLeft = 1;
     public NetworkObject player = null;
 
     [SerializeField]
@@ -43,15 +43,25 @@ public class LocalSceneManager : NetworkBehaviour
             //no se esta escalando
             n.transform.localScale = Vector3.one * newScaleFactor;
             */
-            spheresLeft += 8;
+            spheresLeft += 1;
             state = LocalSceneState.InProgress;
 
             activeBalls.Add(n);
         }
     }
 
+    public void AddBall(NetworkObject n){
+        activeBalls.Add(n);
+    }
+
+    public void AddBall(NetworkObject n1, NetworkObject n2){
+        activeBalls.Add(n1);
+        activeBalls.Add(n2);
+    }
+
     public void Reset(){
         activeBalls = new List<NetworkObject>();
+        state = LocalSceneState.InProgress;
         player.GetComponent<PhotonPlayer>().enabled = true;
         spheresLeft = 0;
     }
@@ -60,9 +70,18 @@ public class LocalSceneManager : NetworkBehaviour
     public void DestroyAllBalls(){
         if(Runner.IsServer){
             if(activeBalls.Count != 0){
+                List<NetworkObject> toDelete = new List<NetworkObject>();
+
+                activeBalls.ForEach((item)=>
+                 {
+                    toDelete.Add(item);
+                });
+
                 foreach(NetworkObject ball in activeBalls){
-                    activeBalls.Remove(ball);
                     Runner.Despawn(ball);
+                }
+                foreach(NetworkObject ball in toDelete){
+                    activeBalls.Remove(ball);
                 }
             }
         }
@@ -71,10 +90,12 @@ public class LocalSceneManager : NetworkBehaviour
     public void BallDestroyed()
     {
         spheresLeft--;
-
+        Debug.Log(spheresLeft);
         if(spheresLeft == 0)
         {
+            Debug.Log("TOBIAS GRINDSET");
             state = LocalSceneState.Victory;
+            GlobalSceneManager.Instance.SpawnBallInOther(this);
         }
     }
 
@@ -85,6 +106,12 @@ public class LocalSceneManager : NetworkBehaviour
         //Creo que no hay que despawnear players tema conectarse y desconectarse
         // y temas de reiniciar partida
         //Runner.Despawn(player);
+        RPC_Configure(player);
+    }
+
+    [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
+    public void RPC_Configure(NetworkObject p){
+        player = p;
         player.GetComponent<PhotonPlayer>().enabled = false;
     }
 }

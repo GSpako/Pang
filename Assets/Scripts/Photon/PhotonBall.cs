@@ -96,6 +96,8 @@ public class PhotonBall : NetworkBehaviour
         // Compute the new size level.
         int newSize = sizeLevel - 1;
 
+        
+
         splitOffset = transform.localScale.x * 3 / 4;
 
         // Calculate spawn positions for the two new balls (offset left and right).
@@ -115,6 +117,8 @@ public class PhotonBall : NetworkBehaviour
 
         controller1.localSceneManager = this.localSceneManager;
         controller2.localSceneManager = this.localSceneManager;
+        
+        this.localSceneManager.AddBall(ballObj1,ballObj2);
 
         //ahora habría que meter estas bolas en la lista de bolas del local y sacar la bola anterior
 

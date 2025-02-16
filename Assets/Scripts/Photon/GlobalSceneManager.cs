@@ -10,9 +10,9 @@ public class GlobalSceneManager : NetworkBehaviour
 {
     public static GlobalSceneManager Instance { get; private set;}
 
-    public List<LocalSceneManager> scenes = new List<LocalSceneManager>();
+    private List<LocalSceneManager> scenes = new List<LocalSceneManager>();
 
-    private List<LocalSceneManager> activeScenes = new List<LocalSceneManager>();
+    public List<LocalSceneManager> activeScenes = new List<LocalSceneManager>();
 
     private int playingScenes;
 
@@ -38,8 +38,14 @@ public class GlobalSceneManager : NetworkBehaviour
 
     public void StartManager(){
         playingScenes = scenes.Count;
-        activeScenes = scenes;
+        activeScenes = new List<LocalSceneManager>();
+        scenes.ForEach((item)=>
+            {
+                activeScenes.Add(item);
+            });
+    
         foreach (LocalSceneManager l in activeScenes){
+            Debug.Log("Tobias estuvo aqui");
             l.DestroyAllBalls();
             l.Reset();
             l.SpawnBall();
@@ -56,6 +62,19 @@ public class GlobalSceneManager : NetworkBehaviour
         }
     }
 
+    public void SpawnBallInOther(LocalSceneManager l){
+        if(activeScenes.Count <=1){ return;}
+        if(Runner.IsServer){
+            LocalSceneManager newl = l;
+            while (newl == l){
+                int r = UnityEngine.Random.Range(0, activeScenes.Count);
+                newl = activeScenes[r];
+            }
+
+            newl.SpawnBall();
+        }
+    }
+
     private void EndGame(){
         started = false;
         //Decir quien gana y toda la pesca
@@ -66,10 +85,8 @@ public class GlobalSceneManager : NetworkBehaviour
     {
         if (Runner.GameMode == GameMode.Host) {
             if (GUI.Button(new Rect(0, 0, 200, 40), "Start")){
-                if(started == false || true){
                     started = true;
                     StartManager();
-                }
             }
         }
     }
