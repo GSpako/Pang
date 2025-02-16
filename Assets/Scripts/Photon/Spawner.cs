@@ -90,6 +90,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         }
         //borrar tmb el escenario cuando se desconecte el jugador
         if (_spawnedScenarios.TryGetValue(player, out NetworkObject networkScene)) {
+            globalManager.RemoveScene(networkScene.GetComponent<LocalSceneManager>());
             runner.Despawn(networkScene);
             _spawnedScenarios.Remove(player);
         }
