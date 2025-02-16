@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Fusion;
 using Fusion.Addons.Physics;
 using Fusion.Sockets;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -48,8 +49,14 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) {
         if (runner.IsServer) {
+            float iniPosX = 3.5f;
+            float iniPosY = 2f;
+
+            int rowPos = runner.SessionInfo.PlayerCount % 3;
+            int columPos = (int) (runner.SessionInfo.PlayerCount-1) / 3;
             // Create a unique position for the player (player.RawEncoded % runner.Config.Simulation.PlayerCount)
-            Vector3 spawnPosition = new Vector3(((player.RawEncoded % runner.Config.Simulation.PlayerCount)-2)* 3.5f, 0, 0);
+            Vector3 spawnPosition = new Vector3((rowPos*iniPosX) - iniPosX, (columPos*iniPosY) - iniPosY , 0);
+
             //EL instanciar la escena ya spawnea un player
             //NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition - new Vector3(0,0.5f,0), Quaternion.identity, player);
             NetworkObject networkScenario = runner.Spawn(referenceScenario, spawnPosition, Quaternion.identity, player);
