@@ -9,7 +9,7 @@
 
 #region Assets/Photon/Fusion/CodeGen/ForLoopMacro.cs
 
-﻿#if FUSION_WEAVER && FUSION_HAS_MONO_CECIL
+#if FUSION_WEAVER && FUSION_HAS_MONO_CECIL
 namespace Fusion.CodeGen {
   using System;
   using System.Collections.Generic;

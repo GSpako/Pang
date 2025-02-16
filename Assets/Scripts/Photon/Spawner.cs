@@ -8,6 +8,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
+
 public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 {
 
@@ -25,6 +27,8 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public scenario scenarios;
 
+    [SerializeField]
+   private NetworkObject countdown;
     public GameObject referenceScenario;
 
     public struct NetworkInputData: INetworkInput{public Vector2 direction;}
@@ -66,6 +70,8 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
 
             globalManager.AddScene(networkPlayerObject.gameObject.GetComponentInParent<LocalSceneManager>());
+            globalManager.countdown = this.countdown;
+            globalManager.syncroCount();
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
             _spawnedScenarios.Add(player, networkScenario);

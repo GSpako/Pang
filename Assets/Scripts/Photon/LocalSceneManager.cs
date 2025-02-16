@@ -13,6 +13,8 @@ public class LocalSceneManager : NetworkBehaviour
     [SerializeField]
     public NetworkPrefabRef ballPrefab;
 
+    [SerializeField]
+    private GameObject deadtext;
     
     private List<NetworkObject> activeBalls = new List<NetworkObject>();
 
@@ -64,6 +66,7 @@ public class LocalSceneManager : NetworkBehaviour
         state = LocalSceneState.InProgress;
         player.GetComponent<PhotonPlayer>().enabled = true;
         spheresLeft = 0;
+        RPC_SyncDead();
     }
 
 
@@ -113,5 +116,12 @@ public class LocalSceneManager : NetworkBehaviour
     public void RPC_Configure(NetworkObject p){
         player = p;
         player.GetComponent<PhotonPlayer>().enabled = false;
+        deadtext.SetActive(true);
+    }
+
+    [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
+    public void RPC_SyncDead(){
+
+        deadtext.SetActive(false);
     }
 }
