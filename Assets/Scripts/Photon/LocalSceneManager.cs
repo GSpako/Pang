@@ -103,6 +103,7 @@ public class LocalSceneManager : NetworkBehaviour
             Debug.Log("TOBIAS GRINDSET");
             state = LocalSceneState.Victory;
             GlobalSceneManager.Instance.SpawnBallInOther(this);
+            this.SpawnBall();
         }
     }
 
